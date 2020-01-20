@@ -70,5 +70,33 @@ public class BD {
         return nombres;
     }
 
+    //TAREAS
+
+    public ArrayList<String> verTareas() throws SQLException {
+        conectar();
+
+        String query = "SELECT * FROM tarea";
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(query);
+
+        ArrayList<String> nombres = new ArrayList<String>();
+
+        while (rs.next()) {
+            // String dni = rs.getString("dni");
+            String nombre = rs.getString("descripcion");
+
+            //añadimos lel nombre que hemos recuperado al Array y lo separamos con un |
+            nombres.add(nombre);
+
+            // String apellido = rs.getString("apellido");
+            //String apellido2 = rs.getString("apellido2");
+            //String foto = rs.getString("foto");
+
+            //  System.out.println("DNI: " + dni + " Nombre: " + nombre + " Apellidos: " + apellido +" "+apellido2);
+        }
+        desconectar();
+        return nombres;
+    }
+
 
 }

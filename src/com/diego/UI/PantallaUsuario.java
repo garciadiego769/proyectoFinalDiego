@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 public class PantallaUsuario extends javax.swing.JFrame {
     private JPanel panel;
-    private JButton trabajdor1;
     private JButton trabajador4btn;
     private JButton trabajador3btn;
     private JButton trabajador2btn;
@@ -43,5 +42,22 @@ public class PantallaUsuario extends javax.swing.JFrame {
 
         String trabajador4 = (String) nombres.get(3);
         trabajador4btn.setText(trabajador4);
+        trabajador1btn.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //trabajador 1
+
+                //lleva al mismo menú
+                pantallaTarea menuTarea = null;
+                try {
+                    menuTarea = new pantallaTarea();
+                    menuTarea.setVisible(true);
+                    menuTarea.setLocationRelativeTo(null);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 }
