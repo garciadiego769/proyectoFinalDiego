@@ -51,6 +51,67 @@ public class PantallaUsuario extends javax.swing.JFrame {
                 //lleva al mismo menú
                 pantallaTarea menuTarea = null;
                 try {
+                    //le pasamos el trabajador que se ha seleccionado
+                    baseDeDatos.recogeNombreTrabajador(trabajador1btn.getText());
+
+                    menuTarea = new pantallaTarea();
+
+                    menuTarea.setVisible(true);
+                    menuTarea.setLocationRelativeTo(null);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        trabajador2btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //trabajador 2
+
+                //lleva al mismo menú
+                pantallaTarea menuTarea = null;
+                try {
+                    //le pasamos el trabajador que se ha seleccionado
+                    baseDeDatos.recogeNombreTrabajador(trabajador2btn.getText());
+
+                    menuTarea = new pantallaTarea();
+                    menuTarea.setVisible(true);
+                    menuTarea.setLocationRelativeTo(null);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        trabajador3btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //trabajador 3
+
+                //lleva al mismo menú
+                pantallaTarea menuTarea = null;
+                try {
+                    //le pasamos el trabajador que se ha seleccionado
+                    baseDeDatos.recogeNombreTrabajador(trabajador3btn.getText());
+
+                    menuTarea = new pantallaTarea();
+                    menuTarea.setVisible(true);
+                    menuTarea.setLocationRelativeTo(null);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        trabajador4btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //trabajador 4
+
+                //lleva al mismo menú
+                pantallaTarea menuTarea = null;
+                try {
+                    //le pasamos el trabajador que se ha seleccionado
+                    baseDeDatos.recogeNombreTrabajador(trabajador4btn.getText());
+
                     menuTarea = new pantallaTarea();
                     menuTarea.setVisible(true);
                     menuTarea.setLocationRelativeTo(null);
