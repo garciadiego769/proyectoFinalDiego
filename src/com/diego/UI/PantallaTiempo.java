@@ -1,7 +1,11 @@
 package com.diego.UI;
 
+import com.diego.BD;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 public class PantallaTiempo extends javax.swing.JFrame{
@@ -21,5 +25,21 @@ public class PantallaTiempo extends javax.swing.JFrame{
         setSize(400,400);
         add(panel);
 
+        enviarBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                //guardamos
+               // BD.guardaDatos.add(tiempoTxt.getText());
+
+                PantallaMantenimiento menuMantenimiento = null;
+                try {
+                    menuMantenimiento = new PantallaMantenimiento();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                menuMantenimiento.setVisible(true);
+                menuMantenimiento.setLocationRelativeTo(null);
+            }
+        });
     }
 }

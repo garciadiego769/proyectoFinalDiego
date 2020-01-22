@@ -7,6 +7,9 @@ public class BD {
     Connection conn = null;
     PreparedStatement preparedStmt;
 
+    //Array donde se irán guardando todas las opciones seleccionadas
+    public static ArrayList<String> guardaDatos=new ArrayList<String>();
+
     //Método conectar
     public void conectar() throws SQLException {
         String driver = "com.mysql.cj.jdbc.Driver";
@@ -36,6 +39,7 @@ public class BD {
             System.out.println("Error al conectar");
         }
     }
+
 
     //DESCONECTAR
     public void desconectar() throws SQLException {
@@ -134,4 +138,22 @@ public class BD {
         return nombreMaquina;
     }
 
+    //MANTENIMIENTOS
+
+    public ArrayList<String> verMantenimientos() throws SQLException {
+        conectar();
+
+        String query = "SELECT * FROM mantenimiento";
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(query);
+
+        ArrayList<String> nombres = new ArrayList<String>();
+
+        while (rs.next()) {
+            String nombre = rs.getString("descripcion");
+            nombres.add(nombre);
+        }
+        desconectar();
+        return nombres;
+    }
 }

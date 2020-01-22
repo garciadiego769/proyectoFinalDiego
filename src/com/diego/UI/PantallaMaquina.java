@@ -3,6 +3,8 @@ package com.diego.UI;
 import com.diego.BD;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -33,6 +35,19 @@ public class PantallaMaquina extends javax.swing.JFrame{
         String maquina = (String) nombres.get(0);
         maquinabtn.setText(maquina);
 
+        maquinabtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                //añadimos la opción a todas las anteriores
+                BD.guardaDatos.add("maquina: "+maquinabtn.getText()); //para pdoer distinguir si tiene máquina o no
+
+                //Al seleccionarla abrimos el menú que pide el tiempo
+                PantallaTiempo menuTiempo = null;
+                menuTiempo = new PantallaTiempo();
+                menuTiempo.setVisible(true);
+                menuTiempo.setLocationRelativeTo(null);
+            }
+        });
     }
 
 

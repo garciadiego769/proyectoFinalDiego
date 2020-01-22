@@ -54,6 +54,10 @@ public class pantallaTarea extends javax.swing.JFrame {
         tarea1btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //guardamos la tarea en el array de las opciones seleccionadas
+                BD.guardaDatos.add(tarea1btn.getText());
+
+                System.out.println(baseDeDatos.guardaDatos);
                 //comprobamos si la tarea tiene una máquina asignada para mostrar un menú u otro
                 try {
 
@@ -64,7 +68,6 @@ public class pantallaTarea extends javax.swing.JFrame {
                         PantallaMaquina menuMaquina = null;
 
                         menuMaquina = new PantallaMaquina(tarea1btn.getText());
-
                         menuMaquina.setVisible(true);
                         menuMaquina.setLocationRelativeTo(null);
                     } else {
@@ -84,6 +87,9 @@ public class pantallaTarea extends javax.swing.JFrame {
         tarea2btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //guardamos la tarea en el array de las opciones seleccionadas
+                BD.guardaDatos.add(tarea2btn.getText());
+
                 int numeroMaquina = 0;
                 try {
                     numeroMaquina = baseDeDatos.verNumeroMaquinaDisponible(tarea2btn.getText());
@@ -118,6 +124,8 @@ public class pantallaTarea extends javax.swing.JFrame {
         tarea3btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //guardamos la tarea en el array de las opciones seleccionadas
+                BD.guardaDatos.add(tarea3btn.getText());
                 int numeroMaquina = 0;
                 try {
                     numeroMaquina = baseDeDatos.verNumeroMaquinaDisponible(tarea3btn.getText());
@@ -152,6 +160,10 @@ public class pantallaTarea extends javax.swing.JFrame {
         tarea4btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //guardamos la tarea en el array de las opciones seleccionadas
+                BD.guardaDatos.add(tarea4btn.getText());
+                System.out.println(baseDeDatos.guardaDatos);
+
                 int numeroMaquina = 0;
                 try {
                     numeroMaquina = baseDeDatos.verNumeroMaquinaDisponible(tarea4btn.getText());
@@ -182,6 +194,9 @@ public class pantallaTarea extends javax.swing.JFrame {
         tarea5btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //guardamos la tarea en el array de las opciones seleccionadas
+                BD.guardaDatos.add(tarea5btn.getText());
+
                 int numeroMaquina = 0;
                 try {
                     numeroMaquina = baseDeDatos.verNumeroMaquinaDisponible(tarea5btn.getText());

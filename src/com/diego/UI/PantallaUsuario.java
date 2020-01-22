@@ -46,15 +46,17 @@ public class PantallaUsuario extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //trabajador 1
+                //guardamos los datos
+                BD.guardaDatos.add(trabajador1btn.getText());
 
                 //lleva al mismo menú
                 pantallaTarea menuTarea = null;
                 try {
-                    //le pasamos el trabajador que se ha seleccionado
                     menuTarea = new pantallaTarea();
-
                     menuTarea.setVisible(true);
                     menuTarea.setLocationRelativeTo(null);
+
+
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
@@ -65,6 +67,8 @@ public class PantallaUsuario extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 //trabajador 2
 
+                //guardamos los datos
+                BD.guardaDatos.add(trabajador2btn.getText());
                 //lleva al mismo menú
                 pantallaTarea menuTarea = null;
                 try {
@@ -73,6 +77,7 @@ public class PantallaUsuario extends javax.swing.JFrame {
                     menuTarea = new pantallaTarea();
                     menuTarea.setVisible(true);
                     menuTarea.setLocationRelativeTo(null);
+
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
@@ -82,6 +87,8 @@ public class PantallaUsuario extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //trabajador 3
+                //guardamos los datos
+                BD.guardaDatos.add(trabajador3btn.getText());
 
                 //lleva al mismo menú
                 pantallaTarea menuTarea = null;
@@ -99,6 +106,8 @@ public class PantallaUsuario extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //trabajador 4
+                //guardamos los datos
+                BD.guardaDatos.add(trabajador4btn.getText());
 
                 //lleva al mismo menú
                 pantallaTarea menuTarea = null;
