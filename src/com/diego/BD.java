@@ -15,9 +15,11 @@ public class BD {
         String driver = "com.mysql.cj.jdbc.Driver";
         String bd = "proyectoFinal";
         String hostname = "localhost";
-        // String port = "3306";
-        //8
-        String port = "3308";
+
+        //casa
+         String port = "3306";
+         //trabajo
+        //String port = "3308";
 
 
         //cadena de conexión

@@ -22,14 +22,14 @@ public class PantallaTiempo extends javax.swing.JFrame{
     }
 
     public PantallaTiempo() {
-        setSize(400,400);
+        setSize(600,400);
         add(panel);
 
         enviarBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 //guardamos
-               // BD.guardaDatos.add(tiempoTxt.getText());
+               BD.guardaDatos.add(tiempoTxt.getText());
 
                 PantallaMantenimiento menuMantenimiento = null;
                 try {
@@ -39,6 +39,7 @@ public class PantallaTiempo extends javax.swing.JFrame{
                 }
                 menuMantenimiento.setVisible(true);
                 menuMantenimiento.setLocationRelativeTo(null);
+
             }
         });
     }
