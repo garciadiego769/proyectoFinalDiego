@@ -12,7 +12,10 @@ public class BD {
         String driver = "com.mysql.cj.jdbc.Driver";
         String bd = "proyectoFinal";
         String hostname = "localhost";
-        String port = "3306";
+        // String port = "3306";
+        //8
+        String port = "3308";
+
 
         //cadena de conexión
         String url = "jdbc:mysql://" + hostname + ":" + port + "/" + bd + "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC";
@@ -54,17 +57,9 @@ public class BD {
         ArrayList<String> nombres = new ArrayList<String>();
 
         while (rs.next()) {
-            // String dni = rs.getString("dni");
             String nombre = rs.getString("nombre");
 
-            //añadimos lel nombre que hemos recuperado al Array y lo separamos con un |
             nombres.add(nombre);
-
-            // String apellido = rs.getString("apellido");
-            //String apellido2 = rs.getString("apellido2");
-            //String foto = rs.getString("foto");
-
-            //  System.out.println("DNI: " + dni + " Nombre: " + nombre + " Apellidos: " + apellido +" "+apellido2);
         }
         desconectar();
         return nombres;
@@ -82,54 +77,61 @@ public class BD {
         ArrayList<String> nombres = new ArrayList<String>();
 
         while (rs.next()) {
-            // String dni = rs.getString("dni");
             String nombre = rs.getString("descripcion");
-
-            //añadimos lel nombre que hemos recuperado al Array y lo separamos con un |
             nombres.add(nombre);
-
-            // String apellido = rs.getString("apellido");
-            //String apellido2 = rs.getString("apellido2");
-            //String foto = rs.getString("foto");
-
-            //  System.out.println("DNI: " + dni + " Nombre: " + nombre + " Apellidos: " + apellido +" "+apellido2);
         }
         desconectar();
         return nombres;
     }
 
     //MAQUINA TAREA
-
-    public ArrayList<String> verMaquina(String codMaquina) throws SQLException {
+    public int verNumeroMaquinaDisponible(String codMaquina) throws SQLException {
         conectar();
 
-        String query = "SELECT * FROM tarea WHERE descripcion='"+codMaquina+"'";
+        String query = "SELECT COUNT(maquina_codMaquina) FROM tarea WHERE descripcion='" + codMaquina + "'";
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery(query);
 
-        ArrayList<String> nombres = new ArrayList<String>();
-
+        int cantidad = 0;
+        //si hay datos, lo devolvemos
         while (rs.next()) {
             // String dni = rs.getString("dni");
-            String nombre = rs.getString("maquina_codMaquina");
-
-            System.out.println(nombre);
-            //añadimos lel nombre que hemos recuperado al Array y lo separamos con un |
-            nombres.add(nombre);
-
-            // String apellido = rs.getString("apellido");
-            //String apellido2 = rs.getString("apellido2");
-            //String foto = rs.getString("foto");
-
-            //  System.out.println("DNI: " + dni + " Nombre: " + nombre + " Apellidos: " + apellido +" "+apellido2);
+            cantidad = rs.getInt("COUNT(maquina_codMaquina)");
         }
         desconectar();
-        return nombres;
+        return cantidad;
     }
 
-    public String recogeNombreTrabajador(String nombre) throws SQLException {
-        return nombre;
-    }
 
+    public ArrayList<String> verMaquina(String nombreTarea) throws SQLException {
+        String nombre = "";
+        conectar();
+
+        String query1 = "SELECT * FROM tarea WHERE descripcion='" + nombreTarea + "'";
+        Statement st1 = conn.createStatement();
+        ResultSet rs1 = st1.executeQuery(query1);
+
+        while (rs1.next()) {
+            //guardamos el nº de maquina para la tarea
+            nombre = rs1.getString("maquina_codMaquina");
+        }
+        desconectar();
+
+        //ahora consultamos la tabla maquina con el nº de maquna que hemos recuperado
+        conectar();
+
+        String query = "SELECT * FROM maquina WHERE codMaquina='" + nombre + "'";
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(query);
+
+        ArrayList<String> nombreMaquina = new ArrayList<String>();
+
+        while (rs.next()) {
+            String nombreMaquina1 = rs.getString("descripcion");
+            nombreMaquina.add(nombreMaquina1);
+        }
+        desconectar();
+        return nombreMaquina;
+    }
 
 }

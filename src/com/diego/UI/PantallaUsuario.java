@@ -29,7 +29,6 @@ public class PantallaUsuario extends javax.swing.JFrame {
 
         //recuperamos el Array con todos los nombres de los trabajadores de la BD
         ArrayList nombres = baseDeDatos.verTrabajadores();
-        System.out.println(nombres);
 
         String trabajador1 = (String) nombres.get(0);
         trabajador1btn.setText(trabajador1);
@@ -52,8 +51,6 @@ public class PantallaUsuario extends javax.swing.JFrame {
                 pantallaTarea menuTarea = null;
                 try {
                     //le pasamos el trabajador que se ha seleccionado
-                    baseDeDatos.recogeNombreTrabajador(trabajador1btn.getText());
-
                     menuTarea = new pantallaTarea();
 
                     menuTarea.setVisible(true);
@@ -72,7 +69,6 @@ public class PantallaUsuario extends javax.swing.JFrame {
                 pantallaTarea menuTarea = null;
                 try {
                     //le pasamos el trabajador que se ha seleccionado
-                    baseDeDatos.recogeNombreTrabajador(trabajador2btn.getText());
 
                     menuTarea = new pantallaTarea();
                     menuTarea.setVisible(true);
@@ -91,8 +87,6 @@ public class PantallaUsuario extends javax.swing.JFrame {
                 pantallaTarea menuTarea = null;
                 try {
                     //le pasamos el trabajador que se ha seleccionado
-                    baseDeDatos.recogeNombreTrabajador(trabajador3btn.getText());
-
                     menuTarea = new pantallaTarea();
                     menuTarea.setVisible(true);
                     menuTarea.setLocationRelativeTo(null);
@@ -110,7 +104,6 @@ public class PantallaUsuario extends javax.swing.JFrame {
                 pantallaTarea menuTarea = null;
                 try {
                     //le pasamos el trabajador que se ha seleccionado
-                    baseDeDatos.recogeNombreTrabajador(trabajador4btn.getText());
 
                     menuTarea = new pantallaTarea();
                     menuTarea.setVisible(true);

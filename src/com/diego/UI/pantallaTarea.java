@@ -17,7 +17,7 @@ public class pantallaTarea extends javax.swing.JFrame {
     private JButton tarea4btn;
     private JButton tarea5btn;
 
-    BD baseDeDatos=new BD();
+    BD baseDeDatos = new BD();
 
     public static void main(String[] args) throws SQLException {
         JFrame frame = new JFrame("pantallaTarea");
@@ -29,14 +29,12 @@ public class pantallaTarea extends javax.swing.JFrame {
 
 
     public pantallaTarea() throws SQLException {
-        setSize(400,400);
+        setSize(400, 400);
         add(panel);
 
-        ArrayList nombres=baseDeDatos.verTareas();
+        ArrayList nombres = baseDeDatos.verTareas();
 
         //recuperamos el Array con todos los nombres de las tareas de la BD
-        System.out.println(nombres);
-
         String tarea1 = (String) nombres.get(0);
         tarea1btn.setText(tarea1);
 
@@ -58,15 +56,18 @@ public class pantallaTarea extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 //comprobamos si la tarea tiene una máquina asignada para mostrar un menú u otro
                 try {
-                    ArrayList maquina=baseDeDatos.verMaquina(tarea1btn.getText());
-                    if (maquina.size()>0){
+
+                    int numeroMaquina = baseDeDatos.verNumeroMaquinaDisponible(tarea1btn.getText());
+
+                    if (numeroMaquina > 0) {
                         //si tenemos datos en el Arraylist, tiene una máquina asignada
                         PantallaMaquina menuMaquina = null;
 
-                        menuMaquina = new PantallaMaquina();
+                        menuMaquina = new PantallaMaquina(tarea1btn.getText());
+
                         menuMaquina.setVisible(true);
                         menuMaquina.setLocationRelativeTo(null);
-                    } else{
+                    } else {
                         //Si tiene datos, vamos directamente al menú que pide el tiempo
                         PantallaTiempo menuTiempo = null;
 
@@ -79,23 +80,24 @@ public class pantallaTarea extends javax.swing.JFrame {
                 }
             }
         });
+
         tarea2btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ArrayList maquina= null;
+                int numeroMaquina = 0;
                 try {
-                    maquina = baseDeDatos.verMaquina(tarea2btn.getText());
+                    numeroMaquina = baseDeDatos.verNumeroMaquinaDisponible(tarea2btn.getText());
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
-                assert maquina != null;
-                String maquinaResultado= (String) maquina.get(0);
-                if (!maquinaResultado.equalsIgnoreCase("null")){
+                if (numeroMaquina > 0) {
                     //si tenemos datos en el Arraylist, tiene una máquina asignada
                     PantallaMaquina menuMaquina = null;
 
+                    //Le pasamos la tarea que estamos haciendo para que vea qué máquina tiene asociada
+
                     try {
-                        menuMaquina = new PantallaMaquina();
+                        menuMaquina = new PantallaMaquina(tarea2btn.getText());
                         menuMaquina.setVisible(true);
                         menuMaquina.setLocationRelativeTo(null);
                     } catch (SQLException ex) {
@@ -103,7 +105,7 @@ public class pantallaTarea extends javax.swing.JFrame {
                     }
                     menuMaquina.setVisible(true);
                     menuMaquina.setLocationRelativeTo(null);
-                } else{
+                } else {
                     //Si tiene datos, vamos directamente al menú que pide el tiempo
                     PantallaTiempo menuTiempo = null;
 
@@ -116,25 +118,27 @@ public class pantallaTarea extends javax.swing.JFrame {
         tarea3btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ArrayList maquina= null;
+                int numeroMaquina = 0;
                 try {
-                    maquina = baseDeDatos.verMaquina(tarea3btn.getText());
-                    System.out.println(maquina);
+                    numeroMaquina = baseDeDatos.verNumeroMaquinaDisponible(tarea3btn.getText());
+
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
-                if (maquina.size()>0){
+
+                if (numeroMaquina > 0) {
                     //si tenemos datos en el Arraylist, tiene una máquina asignada
                     PantallaMaquina menuMaquina = null;
 
                     try {
-                        menuMaquina = new PantallaMaquina();
+                        menuMaquina = new PantallaMaquina(tarea3btn.getText());
                     } catch (SQLException ex) {
                         ex.printStackTrace();
                     }
+
                     menuMaquina.setVisible(true);
                     menuMaquina.setLocationRelativeTo(null);
-                } else{
+                } else {
                     //Si tiene datos, vamos directamente al menú que pide el tiempo
                     PantallaTiempo menuTiempo = null;
 
@@ -144,27 +148,28 @@ public class pantallaTarea extends javax.swing.JFrame {
                 }
             }
         });
+
         tarea4btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ArrayList maquina= null;
+                int numeroMaquina = 0;
                 try {
-                    maquina = baseDeDatos.verMaquina(tarea4btn.getText());
+                    numeroMaquina = baseDeDatos.verNumeroMaquinaDisponible(tarea4btn.getText());
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
-                if (maquina.size()>0){
+
+                if (numeroMaquina > 0) {
                     //si tenemos datos en el Arraylist, tiene una máquina asignada
                     PantallaMaquina menuMaquina = null;
-
                     try {
-                        menuMaquina = new PantallaMaquina();
+                        menuMaquina = new PantallaMaquina(tarea4btn.getText());
                     } catch (SQLException ex) {
                         ex.printStackTrace();
                     }
                     menuMaquina.setVisible(true);
                     menuMaquina.setLocationRelativeTo(null);
-                } else{
+                } else {
                     //Si tiene datos, vamos directamente al menú que pide el tiempo
                     PantallaTiempo menuTiempo = null;
 
@@ -177,24 +182,25 @@ public class pantallaTarea extends javax.swing.JFrame {
         tarea5btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ArrayList maquina= null;
+                int numeroMaquina = 0;
                 try {
-                    maquina = baseDeDatos.verMaquina(tarea5btn.getText());
+                    numeroMaquina = baseDeDatos.verNumeroMaquinaDisponible(tarea5btn.getText());
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
-                if (maquina.size()>0){
+
+                if (numeroMaquina > 0) {
                     //si tenemos datos en el Arraylist, tiene una máquina asignada
                     PantallaMaquina menuMaquina = null;
 
                     try {
-                        menuMaquina = new PantallaMaquina();
+                        menuMaquina = new PantallaMaquina(tarea5btn.getText());
                     } catch (SQLException ex) {
                         ex.printStackTrace();
                     }
                     menuMaquina.setVisible(true);
                     menuMaquina.setLocationRelativeTo(null);
-                } else{
+                } else {
                     //Si tiene datos, vamos directamente al menú que pide el tiempo
                     PantallaTiempo menuTiempo = null;
 

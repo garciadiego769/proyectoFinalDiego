@@ -12,29 +12,28 @@ public class PantallaMaquina extends javax.swing.JFrame{
 
     BD baseDeDatos=new BD();
 
-    public static void main(String[] args) throws SQLException {
+   /* public static void main(String[] args) throws SQLException {
         JFrame frame = new JFrame("pantallaMaquina");
         frame.setContentPane(new PantallaMaquina().panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
     }
+*/
 
-
-    public PantallaMaquina() throws SQLException {
+    public PantallaMaquina(String nombreTarea) throws SQLException {
         setSize(400, 400);
         add(panel);
 
         //buscamos qué máquina tiene asociada esa tarea
 
-       /*ArrayList nombres=baseDeDatos.verMaquina();
+       ArrayList nombres=baseDeDatos.verMaquina(nombreTarea);
 
         //recuperamos el Array con todos los nombres de las tareas de la BD
-        System.out.println(nombres);
-
         String maquina = (String) nombres.get(0);
         maquinabtn.setText(maquina);
-*/
+
     }
+
 
 }
