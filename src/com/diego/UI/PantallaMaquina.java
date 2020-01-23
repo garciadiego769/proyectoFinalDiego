@@ -8,11 +8,11 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class PantallaMaquina extends javax.swing.JFrame{
+public class PantallaMaquina extends javax.swing.JFrame {
     private JButton maquinabtn;
     private JPanel panel;
 
-    BD baseDeDatos=new BD();
+    BD baseDeDatos = new BD();
 
    /* public static void main(String[] args) throws SQLException {
         JFrame frame = new JFrame("pantallaMaquina");
@@ -29,7 +29,7 @@ public class PantallaMaquina extends javax.swing.JFrame{
 
         //buscamos qué máquina tiene asociada esa tarea
 
-       ArrayList nombres=baseDeDatos.verMaquina(nombreTarea);
+        ArrayList nombres = baseDeDatos.verMaquina(nombreTarea);
 
         //recuperamos el Array con todos los nombres de las tareas de la BD
         String maquina = (String) nombres.get(0);
@@ -39,13 +39,14 @@ public class PantallaMaquina extends javax.swing.JFrame{
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 //añadimos la opción a todas las anteriores
-                BD.guardaDatos.add("maquina: "+maquinabtn.getText()); //para pdoer distinguir si tiene máquina o no
+                BD.guardaDatos.add("maquina: " + maquinabtn.getText()); //para pdoer distinguir si tiene máquina o no
 
                 //Al seleccionarla abrimos el menú que pide el tiempo
                 PantallaTiempo menuTiempo = null;
                 menuTiempo = new PantallaTiempo();
                 menuTiempo.setVisible(true);
                 menuTiempo.setLocationRelativeTo(null);
+                
             }
         });
     }

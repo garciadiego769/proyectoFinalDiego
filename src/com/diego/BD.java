@@ -17,9 +17,9 @@ public class BD {
         String hostname = "localhost";
 
         //casa
-         String port = "3306";
+         //String port = "3306";
          //trabajo
-        //String port = "3308";
+        String port = "3308";
 
 
         //cadena de conexión

@@ -6,9 +6,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.sql.SQLException;
 
-public class PantallaTiempo extends javax.swing.JFrame{
+public class PantallaTiempo extends javax.swing.JFrame implements WindowListener {
     private JPanel panel;
     private JTextField tiempoTxt;
     private JButton enviarBtn;
@@ -24,6 +26,10 @@ public class PantallaTiempo extends javax.swing.JFrame{
     public PantallaTiempo() {
         setSize(600,400);
         add(panel);
+
+        JFrame frame = new JFrame("pantallaTiempo");
+      //  frame.addWindowListener(windowClosing());
+        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 
         enviarBtn.addActionListener(new ActionListener() {
             @Override
@@ -42,5 +48,40 @@ public class PantallaTiempo extends javax.swing.JFrame{
 
             }
         });
+    }
+
+    @Override
+    public void windowOpened(WindowEvent windowEvent) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent windowEvent) {
+        System.exit(0);
+    }
+
+    @Override
+    public void windowClosed(WindowEvent windowEvent) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent windowEvent) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent windowEvent) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent windowEvent) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent windowEvent) {
+
     }
 }
