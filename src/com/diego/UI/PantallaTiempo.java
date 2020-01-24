@@ -14,6 +14,7 @@ public class PantallaTiempo extends javax.swing.JFrame implements WindowListener
     private JPanel panel;
     private JTextField tiempoTxt;
     private JButton enviarBtn;
+    private JLabel mensajelbl;
 
     public static void main(String[] args) throws SQLException {
         JFrame frame = new JFrame("pantallaTiempo");
@@ -31,21 +32,30 @@ public class PantallaTiempo extends javax.swing.JFrame implements WindowListener
       //  frame.addWindowListener(windowClosing());
         frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 
+
         enviarBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                //guardamos
-               BD.guardaDatos.add(tiempoTxt.getText());
 
-                PantallaMantenimiento menuMantenimiento = null;
-                try {
-                    menuMantenimiento = new PantallaMantenimiento();
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                //Al pulsar enviar comprobamos que se ha introducido un dato
+                if (tiempoTxt.getText().isEmpty()){
+                    //si es vacío se muestra un mensaje y NO se deja continuar
+                    mensajelbl.setText("¡Se debe introducir el tiempo!");
                 }
-                menuMantenimiento.setVisible(true);
-                menuMantenimiento.setLocationRelativeTo(null);
+                else{
+                    //Si HAY datos, se guardan y se continua
+                    //guardamos
+                    BD.guardaDatos.add(tiempoTxt.getText());
 
+                    PantallaMantenimiento menuMantenimiento = null;
+                    try {
+                        menuMantenimiento = new PantallaMantenimiento();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    menuMantenimiento.setVisible(true);
+                    menuMantenimiento.setLocationRelativeTo(null);
+                }
             }
         });
     }
