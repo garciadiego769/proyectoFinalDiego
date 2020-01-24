@@ -34,6 +34,13 @@ public class PantallaResumen extends javax.swing.JFrame {
         add(panel);
         Boolean tieneMaquina=false;
 
+        String trabajador="";
+        String tarea="";
+        String maquinaCortada="";
+        String tiempoTarea="";
+        String mantenimiento="";
+        String tiempoMantenimiento="";
+
         //Para saber si recuperamos unos datos u otros, comprobamos las posiciones que tiene para ver si han seleccionado una máquina
         for (int i = 0; i < BD.guardaDatos.size(); i++) {
             if (BD.guardaDatos.get(i).contains("maquina:")){
@@ -42,26 +49,59 @@ public class PantallaResumen extends javax.swing.JFrame {
         }
         if (tieneMaquina){
             //rellenamos los datos con lo que hemos ido guardando en el Array
-            trabajadorlbl.setText(BD.guardaDatos.get(0));
-            tarealbl.setText(BD.guardaDatos.get(1));
-            maquinalbl.setText(BD.guardaDatos.get(2));
-            tiempoTarealbl.setText(BD.guardaDatos.get(3));
-            mantenimientolbl.setText(BD.guardaDatos.get(4));
-            tiempoMantenimientolbl.setText(BD.guardaDatos.get(5));
+            trabajador=BD.guardaDatos.get(0);
+            trabajadorlbl.setText(trabajador);
+
+            tarea=BD.guardaDatos.get(1);
+            tarealbl.setText(tarea);
+
+            //Quitamos de la máquina el "maquina:" para quedarnos sólo con el nombre
+            maquinaCortada=BD.guardaDatos.get(2).substring(9);
+            maquinalbl.setText(maquinaCortada);
+
+            tiempoTarea=BD.guardaDatos.get(3);
+            tiempoTarealbl.setText(tiempoTarea);
+
+            mantenimiento=BD.guardaDatos.get(4);
+            mantenimientolbl.setText(mantenimiento);
+
+            tiempoMantenimiento=BD.guardaDatos.get(5);
+            tiempoMantenimientolbl.setText(tiempoMantenimiento);
         }else {
             //rellenamos los datos con lo que hemos ido guardando en el Array pero SIN LA MAQUINA
-            trabajadorlbl.setText(BD.guardaDatos.get(0));
-            tarealbl.setText(BD.guardaDatos.get(1));
-            tiempoTarealbl.setText(BD.guardaDatos.get(2));
-            mantenimientolbl.setText(BD.guardaDatos.get(3));
-            tiempoMantenimientolbl.setText(BD.guardaDatos.get(4));
+            trabajador=BD.guardaDatos.get(0);
+            trabajadorlbl.setText(trabajador);
+
+            tarea=BD.guardaDatos.get(1);
+            tarealbl.setText(tarea);
+
+            tiempoTarea=BD.guardaDatos.get(2);
+            tiempoTarealbl.setText(tiempoTarea);
+
+            mantenimiento=BD.guardaDatos.get(3);
+            mantenimientolbl.setText(tiempoMantenimiento);
+
+            tiempoMantenimiento=BD.guardaDatos.get(4);
+            tiempoMantenimientolbl.setText(tiempoMantenimiento);
         }
 
 
+        String finalTrabajador = trabajador;
+        String finalTarea = tarea;
+        String finalMaquinaCortada = maquinaCortada;
+        String finalTiempoTarea = tiempoTarea;
+        String finalMantenimiento = mantenimiento;
+        String finalTiempoMantenimiento = tiempoMantenimiento;
         registrarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //GUARDAR EN LA BBDD
+                BD baseDeDatos=new BD();
+                try {
+                    baseDeDatos.insertarActividad(finalTrabajador, finalTarea, finalMaquinaCortada, finalTiempoTarea, finalMantenimiento, finalTiempoMantenimiento);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
 
             }
         });
