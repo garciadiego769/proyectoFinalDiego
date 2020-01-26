@@ -4,6 +4,7 @@ import com.diego.UI.PantallaFinal;
 import com.diego.UI.PantallaResumen;
 import com.diego.UI.PantallaTiempo;
 
+import javax.sound.midi.Track;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -275,22 +276,33 @@ public class BD {
 
     //TRABAJOS
 
-    public ArrayList<String> verTrabajos() throws SQLException {
+    public ArrayList<String> verTrabajosPorTrabajador(String codTrabajador) throws SQLException {
         conectar();
 
-        String query = "SELECT * FROM trabajo";
+        String query = "SELECT DISTINCT * FROM trabajo,tarea WHERE trabajo.trabajador_dni='"+codTrabajador+"' AND tarea.codTarea=trabajo.tarea_codTarea;\n";
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery(query);
 
-        ArrayList<String> nombres = new ArrayList<String>();
+        ArrayList<String> trabajadorDatos = new ArrayList<String>();
 
+        //guardamos todos los datos de la tabla TRABAJO para ese trabajador
         while (rs.next()) {
-            String nombre = rs.getString("descripcion");
-            nombres.add(nombre);
+            String dni = rs.getString("descripcion");
+            trabajadorDatos.add(dni);
+
+            String tarea = rs.getString("maquina_co");
+            trabajadorDatos.add(tarea);
+
+            String fecha = rs.getString("fecha");
+            trabajadorDatos.add(fecha);
+
+            String tiempo = rs.getString("tiempo");
+            trabajadorDatos.add(tiempo);
+
+            String codTrabajo = rs.getString("codTrabajo");
+            trabajadorDatos.add(codTrabajo);
         }
-        desconectar();
-        System.out.println(nombres);
-        return nombres;
+        return trabajadorDatos;
     }
 
 }

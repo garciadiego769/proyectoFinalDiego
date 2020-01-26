@@ -2,32 +2,46 @@ package com.diego.Informes;
 
 import java.io.*;
 
+import com.diego.BD;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 
 public class GeneradorInformes {
-    public GeneradorInformes(String fechaDesde, String fechaHasta) {
 
-    }
+    BD baseDeDatos=new BD();
 
-    public static void main(String[] args) {
+
+    public void generaInformes(String fechaDesde, String fechaHasta) {
         try {
-            String filename = "C:/NewExcelFile.xls";
+
+            String filename = "/Users/diego/Documents/Clase/Proyecto Final/proyectoFinalDiego/ResumenDiario.xls";
             HSSFWorkbook workbook = new HSSFWorkbook();
-            HSSFSheet sheet = workbook.createSheet("Hoja 1");
 
-            HSSFRow rowhead = sheet.createRow((short) 0);
-            rowhead.createCell(0).setCellValue("No.");
-            rowhead.createCell(1).setCellValue("Name");
-            rowhead.createCell(2).setCellValue("Address");
-            rowhead.createCell(3).setCellValue("Email");
+            //ver nº de trabajadores
+            int numTrabajadores=baseDeDatos.verTrabajadores().size();
 
-            HSSFRow row = sheet.createRow((short) 1);
-            row.createCell(0).setCellValue("1");
-            row.createCell(1).setCellValue("Sankumarsingh");
-            row.createCell(2).setCellValue("India");
-            row.createCell(3).setCellValue("sankumarsingh@gmail.com");
+            //por cada uno, una hoja
+            for (int i = 0; i < numTrabajadores; i++) {
+                //nombre de la hoja con el nombre del trabajador
+                HSSFSheet hoja = workbook.createSheet(baseDeDatos.verTrabajadores().get(i));
+
+                HSSFRow rowhead = hoja.createRow((short) 0);
+
+                rowhead.createCell(0).setCellValue(baseDeDatos.verTrabajadores().get(i));
+                rowhead.createCell(1).setCellValue("1");
+                rowhead.createCell(2).setCellValue("2");
+                rowhead.createCell(3).setCellValue("3");
+
+
+                HSSFRow row = hoja.createRow((short) 1);
+                row.createCell(0).setCellValue(baseDeDatos.ver);
+                row.createCell(1).setCellValue("Sankumarsingh");
+                row.createCell(2).setCellValue("India");
+                row.createCell(3).setCellValue("sankumarsingh@gmail.com");
+            }
+
+
 
             FileOutputStream fileOut = new FileOutputStream(filename);
             workbook.write(fileOut);
