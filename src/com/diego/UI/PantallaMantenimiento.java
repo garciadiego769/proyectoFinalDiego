@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class PantallaMantenimiento extends javax.swing.JFrame{
+public class PantallaMantenimiento extends javax.swing.JFrame {
     private JTextField tiempoTxt;
     private JPanel panel;
     private JButton registrarBtn;
@@ -57,7 +57,7 @@ public class PantallaMantenimiento extends javax.swing.JFrame{
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 //se han introducido datos?
-                if (tiempoTxt.getText().isEmpty()){
+                if (tiempoTxt.getText().isEmpty()) {
                     //no hacemos nada
                     mensajeLabel.setText("¡Se debe introducir el tiempo!");
                 } else {

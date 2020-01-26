@@ -1,5 +1,9 @@
 package com.diego;
 
+import com.diego.UI.PantallaFinal;
+import com.diego.UI.PantallaResumen;
+import com.diego.UI.PantallaTiempo;
+
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -8,6 +12,8 @@ import java.util.ArrayList;
 public class BD {
     Connection conn = null;
     PreparedStatement preparedStmt;
+    PreparedStatement preparedStmtTrabajoMantenimiento;
+
 
     //Array donde se irán guardando todas las opciones seleccionadas
     public static ArrayList<String> guardaDatos = new ArrayList<String>();
@@ -163,78 +169,128 @@ public class BD {
 
 
     //INSERTAR
-    public void insertarActividad(String trabajador, String actividad, String maquina, String tiempo, String mantenimiento, String tiempoMantenimiento) throws SQLException {
+    public void insertarActividad(String trabajador, String actividad, String tiempo, String mantenimiento, String tiempoMantenimiento) throws SQLException {
         conectar();
 
-      /*  FECHA
-      DateFormat formatter = new SimpleDateFormat("dd-MM-YYY");
-        Date myDate = formatter.parse(date);
-        java.sql.Date sqlDate = new java.sql.Date(myDate.getTime());
-*/
-        //Vamos haciendo las consultas para obtener los datos necesarios para insertar en la tabla
-        //Conseguimos el DNI
-        String queryTrabajador = "SELECT * FROM trabajador WHERE nombre='" + trabajador + "'";
-        Statement stTrabajador = conn.createStatement();
-        ResultSet rsTrabajador = stTrabajador.executeQuery(queryTrabajador);
+        String mensaje;
 
-        String dniTrabajador = new String();
-        while (rsTrabajador.next()) {
-            String nombre = rsTrabajador.getString("dni");
-            dniTrabajador = nombre;
-        }
+        java.util.Date fecha = new java.util.Date();
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        String fechaHoy = sdf.format(fecha);
 
-        //TAREA
-        String queryTarea = "SELECT * FROM tarea WHERE descripcion='" + actividad + "'";
-        Statement stTarea = conn.createStatement();
-        ResultSet rsTarea = stTarea.executeQuery(queryTarea);
+        try {
+            //Vamos haciendo las consultas para obtener los datos necesarios para insertar en la tabla
+            //Conseguimos el DNI
+            String queryTrabajador = "SELECT * FROM trabajador WHERE nombre='" + trabajador + "'";
+            Statement stTrabajador = conn.createStatement();
+            ResultSet rsTrabajador = stTrabajador.executeQuery(queryTrabajador);
 
-        String codTarea = new String();
-        while (rsTarea.next()) {
-            String codigo = rsTarea.getString("codTarea");
-            codTarea = codigo;
-        }
+            String dniTrabajador = new String();
+            while (rsTrabajador.next()) {
+                String nombre = rsTrabajador.getString("dni");
+                dniTrabajador = nombre;
+            }
 
-        //MANTENIMIENTO
-        String queryMantenimiento = "SELECT * FROM mantenimiento WHERE descripcion='" + mantenimiento + "'";
-        Statement stMantenimiento = conn.createStatement();
-        ResultSet rsMantenimiento = stMantenimiento.executeQuery(queryMantenimiento);
+            //TAREA
+            String queryTarea = "SELECT * FROM tarea WHERE descripcion='" + actividad + "'";
+            Statement stTarea = conn.createStatement();
+            ResultSet rsTarea = stTarea.executeQuery(queryTarea);
 
-        String codMantenimiento = new String();
-        while (rsMantenimiento.next()) {
-            String codigo = rsMantenimiento.getString("codMantenimiento");
-            codMantenimiento = codigo;
-        }
+            String codTarea = new String();
+            while (rsTarea.next()) {
+                String codigo = rsTarea.getString("codTarea");
+                codTarea = codigo;
+            }
 
-        //MAQUINA
-        String queryMaquina = "SELECT * FROM mquina WHERE descricpcion='" + maquina + "'";
-        Statement stMaquina = conn.createStatement();
-        ResultSet rsMaquina = stMaquina.executeQuery(queryMaquina);
+            //MANTENIMIENTO
+            String queryMantenimiento = "SELECT * FROM mantenimiento WHERE descripcion='" + mantenimiento + "'";
+            Statement stMantenimiento = conn.createStatement();
+            ResultSet rsMantenimiento = stMantenimiento.executeQuery(queryMantenimiento);
 
-        String codMaquina = new String();
-        while (rsMaquina.next()) {
-            String codigo = rsMaquina.getString("codMaquina");
-            codMaquina = codigo;
-        }
+            String codMantenimiento = new String();
+            while (rsMantenimiento.next()) {
+                String codigo = rsMantenimiento.getString("codMantenimiento");
+                codMantenimiento = codigo;
+            }
 
-        //SI NO hay maquina hacemos una inserción
-        if (maquina.isEmpty()) {
-            // query con los datos a insertar
+            //<-------- Recuperar último código de mantenimiento y de trabajo --------->
+            // CODTRABAJO
+            //recuperamos el último nº de trabajo para añadir el siguiente
+            String queryCodTrabajo = "SELECT * FROM trabajo ORDER BY codTrabajo DESC LIMIT 1";
+            Statement stCodTrabajo = conn.createStatement();
+            ResultSet rsCodTrabajo = stCodTrabajo.executeQuery(queryCodTrabajo);
 
-            String query = "INSERT INTO trabajo VALUES('" + dniTrabajador + "','" + codTarea + "','" + "20190101" + "','" + tiempo + "');";
+            int codTrabajo = 0;
+            while (rsCodTrabajo.next()) {
+                int codigo = rsCodTrabajo.getInt("codTrabajo");
+                codTrabajo = codigo;
+            }
 
+            //le sumamos uno al último codTrabajo
+            codTrabajo += 1;
+
+            //CODTRABAJOMANTENIMIENTO
+            //recuperamos el último nº de mantenimiento para añadir el siguiente
+            String queryCodTrabajoMantenimiento = "SELECT * FROM trabajoMantenimiento ORDER BY codTrabajoMantenimiento DESC LIMIT 1";
+            Statement stCodTrabajoMantenimiento = conn.createStatement();
+            ResultSet rsCodTrabajoMantenimiento = stCodTrabajoMantenimiento.executeQuery(queryCodTrabajoMantenimiento);
+
+            int codTrabajoMantenimiento = 0;
+            while (rsCodTrabajoMantenimiento.next()) {
+                int codigo = rsCodTrabajoMantenimiento.getInt("codTrabajoMantenimiento");
+                codTrabajoMantenimiento = codigo;
+            }
+
+            //le sumamos uno al último codTrabajoMantenimiento
+            codTrabajoMantenimiento += 1;
+
+            //INSERCIONES
+
+            // Query para TRABAJO
+            String query = "INSERT INTO trabajo VALUES('" + dniTrabajador + "','" + codTarea + "','" + fechaHoy + "','" + tiempo + "','" + codTrabajo + "');";
+            //Query para TrabajoMantenimiento
+            String queryTrabajoMantenimiento = "INSERT INTO trabajoMantenimiento VALUES('" + codMantenimiento + "','" + dniTrabajador + "','" + fechaHoy + "','" + tiempo + "','" + codTrabajoMantenimiento + "');";
+
+            //se insertan ambos
             preparedStmt = conn.prepareStatement(query);
-
-            // execute the preparedstatement
             preparedStmt.execute();
-        } else {
-            //SI HAY datos hacemos otra inserción
 
+            preparedStmtTrabajoMantenimiento = conn.prepareStatement(queryTrabajoMantenimiento);
+            preparedStmtTrabajoMantenimiento.execute();
+
+            mensaje = "Datos guardados correctamente";
+
+            desconectar();
         }
-
-        desconectar();
-
-
+        //controlamos las excepciones y mostramos un mensaje u otro en la pantalla final
+        catch (SQLException e) {
+            mensaje = "Ha ocurrido un error a la hora de guardar datos";
+        }
+        //Abrimos la pantalla final
+        PantallaFinal pantallaFinal = null;
+        pantallaFinal = new PantallaFinal(mensaje);
+        pantallaFinal.setVisible(true);
+        pantallaFinal.setLocationRelativeTo(null);
     }
 
+    //TRABAJOS
+
+    public ArrayList<String> verTrabajos() throws SQLException {
+        conectar();
+
+        String query = "SELECT * FROM trabajo";
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(query);
+
+        ArrayList<String> nombres = new ArrayList<String>();
+
+        while (rs.next()) {
+            String nombre = rs.getString("descripcion");
+            nombres.add(nombre);
+        }
+        desconectar();
+        System.out.println(nombres);
+        return nombres;
+    }
 
 }
