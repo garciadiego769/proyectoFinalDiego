@@ -1,13 +1,8 @@
 package com.diego;
 
 import com.diego.UI.PantallaFinal;
-import com.diego.UI.PantallaResumen;
-import com.diego.UI.PantallaTiempo;
 
-import javax.sound.midi.Track;
 import java.sql.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class BD {
@@ -26,9 +21,9 @@ public class BD {
         String hostname = "localhost";
 
         //casa
-        //String port = "3306";
+        String port = "3306";
         //trabajo
-        String port = "3308";
+        //String port = "3308";
 
 
         //cadena de conexión
@@ -276,7 +271,7 @@ public class BD {
 
     //TRABAJOS
 
-    public ArrayList<String> verTrabajosPorTrabajador(String codTrabajador) throws SQLException {
+    public String[][] verTrabajosPorTrabajador(String codTrabajador) throws SQLException {
         conectar();
 
         String query = "SELECT DISTINCT * ,IFNULL (tarea.maquina_codMaquina,-1) as maquina_codMaquinaNulo FROM trabajador,trabajo,tarea WHERE trabajo.trabajador_dni='" + codTrabajador + "' AND tarea.codTarea=trabajo.tarea_codTarea AND trabajador.dni=trabajo.trabajador_dni;";
@@ -285,13 +280,16 @@ public class BD {
 
         //conseguir tamaño resultSet, nº de resultados
         int tamaño = 0;
-        if (rs != null) {
-            rs.last();    // moves cursor to the last row
-            tamaño = rs.getRow(); // get row id
+        while (rs.next()) {
+            tamaño++;    // moves cursor to the last row
         }
+        //mover el cursor de vuelta a la primera posición
+        rs.first();
 
         String nombre = "";
         String apellido = "";
+
+        //array bidimensional con tantas filas como resultados devuelve la consulta y 6 columnas
         String[][] prueba = new String[tamaño][6];
 
         ArrayList<String> fechas = new ArrayList<String>();
@@ -300,45 +298,60 @@ public class BD {
         ArrayList<String> maquinas = new ArrayList<String>();
         ArrayList<String> todo = new ArrayList<String>();
 
+        int cuenta = -1;
         //guardamos todos los datos de la tabla TRABAJO para ese trabajador
         while (rs.next()) {
+            //sumamos 1 al contador
+            cuenta = cuenta + 1;
+
             nombre = rs.getString("nombre");
             todo.add(nombre);
+            //nombre en la casilla 0,1
+            System.out.println("  " + prueba[cuenta][0]);
 
             apellido = rs.getString("apellido");
             todo.add(apellido);
+            prueba[cuenta][1] = apellido;
 
             String fecha = rs.getString("fecha");
             fechas.add(fecha);
             todo.add(fecha);
-
+            prueba[cuenta][2] = fecha;
 
             String tiempo = rs.getString("tiempo");
             tiempos.add(tiempo);
             todo.add(tiempo);
-
+            prueba[cuenta][3] = tiempo;
 
             String descripcion = rs.getString("descripcion");
             descripciones.add(descripcion);
             todo.add(descripcion);
+            prueba[cuenta][4] = descripcion;
 
             String codMaquinas = rs.getString("maquina_codMaquinaNulo");
             // System.out.println(codMaquinas);
             if (codMaquinas.equalsIgnoreCase("-1")) {
                 maquinas.add("ninguna");
+                prueba[cuenta][5] = "ninguna";
             } else {
                 maquinas.add(codMaquinas);
+                prueba[cuenta][5] = codMaquinas;
             }
 
             todo.add(maquinas + "|"); //separador
-
         }
 
 
         String nombreCompleto = nombre + apellido;
 
         System.out.println(nombre);
-        return todo;
+
+        for (int j = 0; j < prueba.length; j++) {
+            for (int k = 0; k < prueba[j].length; k++) {
+                System.out.println("aasa" + prueba[j][k]);
+            }
+        }
+        return prueba;
     }
 
     public String verCodTrabajadorPorNombre(String nombre) throws SQLException {
