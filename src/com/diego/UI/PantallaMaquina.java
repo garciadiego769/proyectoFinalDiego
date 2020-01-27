@@ -39,7 +39,7 @@ public class PantallaMaquina extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 //añadimos la opción a todas las anteriores
-                BD.guardaDatos.add("maquina: " + maquinabtn.getText()); //para pdoer distinguir si tiene máquina o no
+                BD.guardaDatos.add("maquina: " + maquinabtn.getText()); //para poder distinguir si tiene máquina o no
 
                 //Al seleccionarla abrimos el menú que pide el tiempo
                 PantallaTiempo menuTiempo = null;

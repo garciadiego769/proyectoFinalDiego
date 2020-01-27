@@ -26,9 +26,9 @@ public class BD {
         String hostname = "localhost";
 
         //casa
-        String port = "3306";
+        //String port = "3306";
         //trabajo
-        //String port = "3308";
+        String port = "3308";
 
 
         //cadena de conexión
@@ -279,30 +279,66 @@ public class BD {
     public ArrayList<String> verTrabajosPorTrabajador(String codTrabajador) throws SQLException {
         conectar();
 
-        String query = "SELECT DISTINCT * FROM trabajo,tarea WHERE trabajo.trabajador_dni='"+codTrabajador+"' AND tarea.codTarea=trabajo.tarea_codTarea;\n";
+        String query = "SELECT DISTINCT * FROM trabajador,trabajo,tarea WHERE trabajo.trabajador_dni='" + codTrabajador + "' AND tarea.codTarea=trabajo.tarea_codTarea AND trabajador.dni=trabajo.trabajador_dni;";
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery(query);
 
-        ArrayList<String> trabajadorDatos = new ArrayList<String>();
+        String nombre = "";
+        String apellido = "";
+        ArrayList<String> fechas = new ArrayList<String>();
+        ArrayList<String> tiempos = new ArrayList<String>();
+        ArrayList<String> descripciones = new ArrayList<String>();
+        ArrayList<String> maquinas = new ArrayList<String>();
+        ArrayList<String> todo = new ArrayList<String>();
 
         //guardamos todos los datos de la tabla TRABAJO para ese trabajador
         while (rs.next()) {
-            String dni = rs.getString("descripcion");
-            trabajadorDatos.add(dni);
+            nombre = rs.getString("nombre");
+            todo.add(nombre);
 
-            String tarea = rs.getString("maquina_co");
-            trabajadorDatos.add(tarea);
+            apellido = rs.getString("apellido");
+            todo.add(apellido);
 
             String fecha = rs.getString("fecha");
-            trabajadorDatos.add(fecha);
+            fechas.add(fecha);
+            todo.add(fecha);
+
 
             String tiempo = rs.getString("tiempo");
-            trabajadorDatos.add(tiempo);
+            tiempos.add(tiempo);
+            todo.add(tiempo);
 
-            String codTrabajo = rs.getString("codTrabajo");
-            trabajadorDatos.add(codTrabajo);
+
+            String descripcion = rs.getString("descripcion");
+            descripciones.add(descripcion);
+            todo.add(descripcion);
+
+            String codMaquinas = rs.getString("maquina_codMaquina");
+            maquinas.add(codMaquinas);
+            todo.add(maquinas + "|"); //separador
+
         }
-        return trabajadorDatos;
+
+
+        String nombreCompleto = nombre + apellido;
+
+        System.out.println(nombre);
+        return todo;
     }
 
+    public String verCodTrabajadorPorNombre(String nombre) throws SQLException {
+        conectar();
+        //Vamos haciendo las consultas para obtener los datos necesarios para insertar en la tabla
+        //Conseguimos el DNI
+        String queryTrabajador = "SELECT * FROM trabajador WHERE nombre='" + nombre + "'";
+        Statement stTrabajador = conn.createStatement();
+        ResultSet rsTrabajador = stTrabajador.executeQuery(queryTrabajador);
+
+        String dniTrabajador = new String();
+        while (rsTrabajador.next()) {
+            String nombreTrabajador = rsTrabajador.getString("dni");
+            dniTrabajador = nombreTrabajador;
+        }
+        return dniTrabajador;
+    }
 }

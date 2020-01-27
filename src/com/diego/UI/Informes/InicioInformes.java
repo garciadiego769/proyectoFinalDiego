@@ -1,11 +1,13 @@
 package com.diego.UI.Informes;
 
 import com.diego.Informes.GeneradorInformes;
+import com.diego.UI.PantallaTiempo;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class InicioInformes extends javax.swing.JFrame{
     private JPanel panel;
@@ -16,6 +18,13 @@ public class InicioInformes extends javax.swing.JFrame{
     private JButton generarInformesbtn;
     private JLabel mensajelbl;
 
+    public static void main(String[] args) throws SQLException {
+        JFrame frame = new JFrame("pantallaTiempo");
+        frame.setContentPane(new InicioInformes().panel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+    }
     public InicioInformes() throws HeadlessException {
         add(panel);
 

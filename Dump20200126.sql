@@ -18,6 +18,7 @@
 --
 -- Table structure for table `mantenimiento`
 --
+USE proyectoFinal;
 
 DROP TABLE IF EXISTS `mantenimiento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
