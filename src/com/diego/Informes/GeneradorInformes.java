@@ -14,7 +14,7 @@ public class GeneradorInformes {
 
     }
 
-    BD baseDeDatos=new BD();
+    BD baseDeDatos = new BD();
     Connection conn = null;
     PreparedStatement preparedStmt;
 
@@ -28,8 +28,14 @@ public class GeneradorInformes {
             HSSFWorkbook workbook = new HSSFWorkbook();
 
             //ver nº de trabajadores
-            int numTrabajadores=baseDeDatos.verTrabajadores().size();
-            String codTrabajador="";
+            int numTrabajadores = baseDeDatos.verTrabajadores().size();
+            String codTrabajador = "";
+            String nombre = "";
+            String apellido = "";
+            String fecha = "";
+            String trabajo = "";
+            String tiempo = "";
+            String maquina = "";
 
             //por cada uno, una hoja
             for (int i = 0; i < numTrabajadores; i++) {
@@ -37,8 +43,9 @@ public class GeneradorInformes {
                 HSSFSheet hoja = workbook.createSheet(baseDeDatos.verTrabajadores().get(i));
 
                 //conseguir nº de trabajador
-                codTrabajador=baseDeDatos.verCodTrabajadorPorNombre(baseDeDatos.verTrabajadores().get(i));
-                ArrayList resultadoConsulta=baseDeDatos.verTrabajosPorTrabajador(codTrabajador);
+                codTrabajador = baseDeDatos.verCodTrabajadorPorNombre(baseDeDatos.verTrabajadores().get(i));
+                ArrayList resultadoConsulta = baseDeDatos.verTrabajosPorTrabajador(codTrabajador);
+                System.out.println(resultadoConsulta);
 
                 //SEPARAMOS LOS DATOS DEL ARRAY
                 System.out.println(baseDeDatos.verTrabajosPorTrabajador(codTrabajador));
@@ -59,7 +66,6 @@ public class GeneradorInformes {
             }
 
 
-
             FileOutputStream fileOut = new FileOutputStream(filename);
             workbook.write(fileOut);
             fileOut.close();
@@ -75,15 +81,15 @@ public class GeneradorInformes {
 
         try {
             //casa
-          //  String filename = "/Users/diego/Documents/Clase/Proyecto Final/proyectoFinalDiego/ResumenDiario.xls";
+            //  String filename = "/Users/diego/Documents/Clase/Proyecto Final/proyectoFinalDiego/ResumenDiario.xls";
             //trabajo
             String filename = "/Users/diego/Documents/Clase/Proyecto Final/proyectoFinalDiego/ResumenDiario.xls/ResumenDiario.xls";
 
             HSSFWorkbook workbook = new HSSFWorkbook();
 
             //ver nº de trabajadores
-            int numTrabajadores=baseDeDatos.verTrabajadores().size();
-            String codTrabajador="";
+            int numTrabajadores = baseDeDatos.verTrabajadores().size();
+            String codTrabajador = "";
 
             //por cada uno, una hoja
             for (int i = 0; i < numTrabajadores; i++) {
@@ -91,8 +97,8 @@ public class GeneradorInformes {
                 HSSFSheet hoja = workbook.createSheet(baseDeDatos.verTrabajadores().get(i));
 
                 //conseguir nº de trabajador
-                codTrabajador=baseDeDatos.verCodTrabajadorPorNombre(baseDeDatos.verTrabajadores().get(i));
-                ArrayList resultadoConsulta=baseDeDatos.verTrabajosPorTrabajador(codTrabajador);
+                codTrabajador = baseDeDatos.verCodTrabajadorPorNombre(baseDeDatos.verTrabajadores().get(i));
+                ArrayList resultadoConsulta = baseDeDatos.verTrabajosPorTrabajador(codTrabajador);
 
                 //SEPARAMOS LOS DATOS DEL ARRAY
                 System.out.println(resultadoConsulta);
@@ -106,12 +112,11 @@ public class GeneradorInformes {
 
 
                 HSSFRow row = hoja.createRow((short) 1);
-              //  row.createCell(0).setCellValue(baseDeDatos.ver);
+                //  row.createCell(0).setCellValue(baseDeDatos.ver);
                 row.createCell(1).setCellValue("Sankumarsingh");
                 row.createCell(2).setCellValue("India");
                 row.createCell(3).setCellValue("sankumarsingh@gmail.com");
             }
-
 
 
             FileOutputStream fileOut = new FileOutputStream(filename);

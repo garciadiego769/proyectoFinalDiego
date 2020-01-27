@@ -279,12 +279,21 @@ public class BD {
     public ArrayList<String> verTrabajosPorTrabajador(String codTrabajador) throws SQLException {
         conectar();
 
-        String query = "SELECT DISTINCT * FROM trabajador,trabajo,tarea WHERE trabajo.trabajador_dni='" + codTrabajador + "' AND tarea.codTarea=trabajo.tarea_codTarea AND trabajador.dni=trabajo.trabajador_dni;";
+        String query = "SELECT DISTINCT * ,IFNULL (tarea.maquina_codMaquina,-1) as maquina_codMaquinaNulo FROM trabajador,trabajo,tarea WHERE trabajo.trabajador_dni='" + codTrabajador + "' AND tarea.codTarea=trabajo.tarea_codTarea AND trabajador.dni=trabajo.trabajador_dni;";
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery(query);
 
+        //conseguir tamaño resultSet, nº de resultados
+        int tamaño = 0;
+        if (rs != null) {
+            rs.last();    // moves cursor to the last row
+            tamaño = rs.getRow(); // get row id
+        }
+
         String nombre = "";
         String apellido = "";
+        String[][] prueba = new String[tamaño][6];
+
         ArrayList<String> fechas = new ArrayList<String>();
         ArrayList<String> tiempos = new ArrayList<String>();
         ArrayList<String> descripciones = new ArrayList<String>();
@@ -313,8 +322,14 @@ public class BD {
             descripciones.add(descripcion);
             todo.add(descripcion);
 
-            String codMaquinas = rs.getString("maquina_codMaquina");
-            maquinas.add(codMaquinas);
+            String codMaquinas = rs.getString("maquina_codMaquinaNulo");
+            // System.out.println(codMaquinas);
+            if (codMaquinas.equalsIgnoreCase("-1")) {
+                maquinas.add("ninguna");
+            } else {
+                maquinas.add(codMaquinas);
+            }
+
             todo.add(maquinas + "|"); //separador
 
         }
