@@ -346,7 +346,6 @@ public class BD {
 
         String nombreCompleto = nombre + apellido;
 
-        System.out.println(nombre);
 
         for (int j = 0; j < prueba.length; j++) {
             for (int k = 0; k < prueba[j].length; k++) {

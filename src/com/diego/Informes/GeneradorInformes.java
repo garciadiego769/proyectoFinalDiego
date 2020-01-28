@@ -43,6 +43,7 @@ public class GeneradorInformes {
                 //nombre de la hoja con el nombre del trabajador
                 HSSFSheet hoja = workbook.createSheet(baseDeDatos.verTrabajadores().get(i));
 
+
                 //conseguir nº de trabajador
                 codTrabajador = baseDeDatos.verCodTrabajadorPorNombre(baseDeDatos.verTrabajadores().get(i));
                 // ArrayList resultadoConsulta = baseDeDatos.verTrabajosPorTrabajador(codTrabajador);
@@ -55,7 +56,14 @@ public class GeneradorInformes {
                // numero=numero-1;
                 System.out.println(numero);
 
+                //nombre en celda A1
+                HSSFRow cabeceraColumna = hoja.createRow((short) 0);
+
+                //rowhead.createCell(0).setCellValue(resultadoConsulta[0][0]+" "+resultadoConsulta[0][1]);
+                System.out.println("asmiq"+resultadoConsulta[0][0]+" "+resultadoConsulta[0][1]);
                                 //por cada resultado
+                int numFila=1;
+
                 for (int k = 0; k < numero; k++) {
                     nombre = resultadoConsulta[k][0];
                     apellido = resultadoConsulta[k][1];
@@ -64,24 +72,30 @@ public class GeneradorInformes {
                     descripcion = resultadoConsulta[k][4];
                     maquina = resultadoConsulta[k][5];
 
-                    HSSFRow rowhead = hoja.createRow((short) 0);
+                    //cabeceraColumna = hoja.createRow((short) 0);
 
-                    rowhead.createCell(0).setCellValue(nombre);
-                    rowhead.createCell(1).setCellValue("1");
-                    rowhead.createCell(2).setCellValue("2");
-                    rowhead.createCell(3).setCellValue("3");
+                    cabeceraColumna.createCell(0).setCellValue(nombre);
+                    cabeceraColumna.createCell(1).setCellValue("1");
+                    cabeceraColumna.createCell(2).setCellValue("2");
+                    cabeceraColumna.createCell(3).setCellValue("3");
 
 
+                    int numFila2=1;
+
+                   // int numCo
                     //  FILAS
-                    HSSFRow row = hoja.createRow((short) 1);
+                    HSSFRow fila = hoja.createRow((short) numFila);
                     //  row.createCell(0).setCellValue(baseDeDatos.ver);
-                    row.createCell(0).setCellValue(descripcion);
-                    row.createCell(1).setCellValue(tiempo);
+                    fila.createCell(0).setCellValue(descripcion);
+                    fila.createCell(1).setCellValue(tiempo);
 
-                    row = hoja.createRow((short) 2);
-                    row.createCell(0).setCellValue("Maquina " + maquina);
+                    numFila++;
+
+                    fila = hoja.createRow((short) numFila);
+                    fila.createCell(0).setCellValue("Maquina " + maquina);
                     // row.createCell(3).setCellValue("sankumarsingh@gmail.com");
 
+                    numFila++;
                 }
 
             }
