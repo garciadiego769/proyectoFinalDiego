@@ -21,7 +21,7 @@ public class GeneradorInformes {
     public GeneradorInformes(String fechaDesde, String fechaHasta) {
         try {
             //casa
-            //  String filename = "/Users/diego/Documents/Clase/Proyecto Final/proyectoFinalDiego/ResumenDiario.xls";
+              //String filename = "/Users/diego/Documents/Clase/Proyecto Final/proyectoFinalDiego/ResumenDiario.xls";
             //trabajo
             String filename = "C:\\Users\\dgarcia\\Desktop\\Diego\\Clase\\ProyectoFinal\\proyectoFinalDiego.xls";
 
@@ -47,16 +47,22 @@ public class GeneradorInformes {
                 codTrabajador = baseDeDatos.verCodTrabajadorPorNombre(baseDeDatos.verTrabajadores().get(i));
                 // ArrayList resultadoConsulta = baseDeDatos.verTrabajosPorTrabajador(codTrabajador);
                 // System.out.println(resultadoConsulta);
-                String[][] resultadoConsulta = baseDeDatos.verTrabajosPorTrabajador(codTrabajador);
 
-                //por cada resultado
-                for (int k = 0; k < resultadoConsulta[0].length; k++) {
-                    nombre = resultadoConsulta[i][0];
-                    apellido = resultadoConsulta[i][1];
-                    fecha = resultadoConsulta[i][2];
-                    tiempo = resultadoConsulta[i][3];
-                    descripcion = resultadoConsulta[i][4];
-                    maquina = resultadoConsulta[i][5];
+                String[][] resultadoConsulta = baseDeDatos.verTrabajosPorTrabajador(codTrabajador);
+                int resultadoConsultaTOTAL=baseDeDatos.verTrabajosPorTodosLosTrabajadores();
+
+                int numero=resultadoConsulta.length;
+               // numero=numero-1;
+                System.out.println(numero);
+
+                                //por cada resultado
+                for (int k = 0; k < numero; k++) {
+                    nombre = resultadoConsulta[k][0];
+                    apellido = resultadoConsulta[k][1];
+                    fecha = resultadoConsulta[k][2];
+                    tiempo = resultadoConsulta[k][3];
+                    descripcion = resultadoConsulta[k][4];
+                    maquina = resultadoConsulta[k][5];
 
                     HSSFRow rowhead = hoja.createRow((short) 0);
 
@@ -78,14 +84,13 @@ public class GeneradorInformes {
 
                 }
 
-
-                FileOutputStream fileOut = new FileOutputStream(filename);
-                workbook.write(fileOut);
-                fileOut.close();
-                workbook.close();
-                System.out.println("Your excel file has been generated!");
-
             }
+            FileOutputStream fileOut = new FileOutputStream(filename);
+            workbook.write(fileOut);
+            fileOut.close();
+            workbook.close();
+            System.out.println("Your excel file has been generated!");
+
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {

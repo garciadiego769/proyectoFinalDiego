@@ -21,9 +21,9 @@ public class BD {
         String hostname = "localhost";
 
         //casa
-        String port = "3306";
+        //String port = "3306";
         //trabajo
-        //String port = "3308";
+        String port = "3308";
 
 
         //cadena de conexión
@@ -286,6 +286,7 @@ public class BD {
         //mover el cursor de vuelta a la primera posición
         rs.first();
 
+        tamaño=tamaño-1; //para que el array empiece en la 0
         String nombre = "";
         String apellido = "";
 
@@ -307,7 +308,8 @@ public class BD {
             nombre = rs.getString("nombre");
             todo.add(nombre);
             //nombre en la casilla 0,1
-            System.out.println("  " + prueba[cuenta][0]);
+            prueba[cuenta][0]=nombre;
+
 
             apellido = rs.getString("apellido");
             todo.add(apellido);
@@ -348,12 +350,29 @@ public class BD {
 
         for (int j = 0; j < prueba.length; j++) {
             for (int k = 0; k < prueba[j].length; k++) {
-                System.out.println("aasa" + prueba[j][k]);
+                System.out.println("Posición :"+j+" "+k);
+                System.out.println(prueba[j][k]);
             }
         }
         return prueba;
     }
 
+    //VER TRABAJOS DE TODOS LOS TRABAJADORES
+    public int verTrabajosPorTodosLosTrabajadores() throws SQLException {
+        conectar();
+
+        String query = "SELECT DISTINCT * ,IFNULL (tarea.maquina_codMaquina,-1) as maquina_codMaquinaNulo FROM trabajador,trabajo,tarea WHERE tarea.codTarea=trabajo.tarea_codTarea AND trabajador.dni=trabajo.trabajador_dni;";
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(query);
+
+        //conseguir tamaño resultSet, nº de resultados
+        int tamaño = 0;
+        while (rs.next()) {
+            tamaño++;    // moves cursor to the last row
+        }
+
+        return tamaño;
+    }
     public String verCodTrabajadorPorNombre(String nombre) throws SQLException {
         conectar();
         //Vamos haciendo las consultas para obtener los datos necesarios para insertar en la tabla
