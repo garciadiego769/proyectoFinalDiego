@@ -28,6 +28,10 @@ public class InicioInformes extends javax.swing.JFrame{
     public InicioInformes() throws HeadlessException {
         add(panel);
 
+        //QUITAR
+        fechaDesdeTxt.setText("2020-01-26");
+        fechaHastaTxt.setText("2020-01-27");
+
         generarInformesbtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -271,10 +271,12 @@ public class BD {
 
     //TRABAJOS
 
-    public String[][] verTrabajosPorTrabajador(String codTrabajador) throws SQLException {
+    public String[][] verTrabajosPorTrabajador(String codTrabajador, String fechaInicio,String fechaFin) throws SQLException {
         conectar();
 
-        String query = "SELECT DISTINCT * ,IFNULL (tarea.maquina_codMaquina,-1) as maquina_codMaquinaNulo FROM trabajador,trabajo,tarea WHERE trabajo.trabajador_dni='" + codTrabajador + "' AND tarea.codTarea=trabajo.tarea_codTarea AND trabajador.dni=trabajo.trabajador_dni;";
+        String query = "SELECT DISTINCT * ,IFNULL (tarea.maquina_codMaquina,-1) as maquina_codMaquinaNulo FROM trabajador,trabajo,tarea " +
+                "WHERE trabajo.trabajador_dni='" + codTrabajador + "' AND tarea.codTarea=trabajo.tarea_codTarea " +
+                "AND trabajador.dni=trabajo.trabajador_dni AND fecha BETWEEN '"+fechaInicio+"' AND '"+fechaFin+"';";
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery(query);
 
