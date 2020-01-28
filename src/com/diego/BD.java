@@ -271,12 +271,12 @@ public class BD {
 
     //TRABAJOS
 
-    public String[][] verTrabajosPorTrabajador(String codTrabajador, String fechaInicio,String fechaFin) throws SQLException {
+    public String[][] verTrabajosPorTrabajador(String codTrabajador, String fechaInicio, String fechaFin) throws SQLException {
         conectar();
 
         String query = "SELECT DISTINCT * ,IFNULL (tarea.maquina_codMaquina,-1) as maquina_codMaquinaNulo FROM trabajador,trabajo,tarea " +
                 "WHERE trabajo.trabajador_dni='" + codTrabajador + "' AND tarea.codTarea=trabajo.tarea_codTarea " +
-                "AND trabajador.dni=trabajo.trabajador_dni AND fecha BETWEEN '"+fechaInicio+"' AND '"+fechaFin+"';";
+                "AND trabajador.dni=trabajo.trabajador_dni AND fecha BETWEEN '" + fechaInicio + "' AND '" + fechaFin + "';";
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery(query);
 
@@ -390,5 +390,94 @@ public class BD {
             dniTrabajador = nombreTrabajador;
         }
         return dniTrabajador;
+    }
+
+    //MANTENIMIENTOS
+    public String[][] verMantenimientosPorTrabajador(String codTrabajador, String fechaInicio, String fechaFin) throws SQLException {
+        conectar();
+
+        String query = "SELECT DISTINCT * FROM trabajador,trabajoMantenimiento,mantenimiento " +
+                "WHERE trabajoMantenimiento.trabajador_dni='" + codTrabajador + "' AND trabajoMantenimiento.mantenimiento_codMantenimiento=manteniiento.codMantenimiento " +
+                "AND fecha BETWEEN '" + fechaInicio + "' AND '" + fechaFin + "';";
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(query);
+
+        //conseguir tamaño resultSet, nº de resultados
+        int tamaño = 0;
+        while (rs.next()) {
+            tamaño++;    // moves cursor to the last row
+        }
+        //mover el cursor de vuelta a la primera posición
+        rs.first();
+
+        tamaño = tamaño - 1; //para que el array empiece en la 0
+        String nombre = "";
+        String apellido = "";
+
+        //array bidimensional con tantas filas como resultados devuelve la consulta y 6 columnas
+        String[][] prueba = new String[tamaño + 1][6];
+
+        ArrayList<String> fechas = new ArrayList<String>();
+        ArrayList<String> tiempos = new ArrayList<String>();
+        ArrayList<String> descripciones = new ArrayList<String>();
+        ArrayList<String> maquinas = new ArrayList<String>();
+        ArrayList<String> todo = new ArrayList<String>();
+
+        int cuenta = -1;
+        //guardamos todos los datos de la tabla TRABAJO para ese trabajador
+        do {
+            //sumamos 1 al contador
+            cuenta = cuenta + 1;
+
+            nombre = rs.getString("nombre");
+            todo.add(nombre);
+            //nombre en la casilla 0,1
+            prueba[cuenta][0] = nombre;
+
+            apellido = rs.getString("apellido");
+            todo.add(apellido);
+            prueba[cuenta][1] = apellido;
+
+            String fecha = rs.getString("fecha");
+            fechas.add(fecha);
+            todo.add(fecha);
+            prueba[cuenta][2] = fecha;
+
+            String tiempo = rs.getString("tiempo");
+            tiempos.add(tiempo);
+            todo.add(tiempo);
+            prueba[cuenta][3] = tiempo;
+
+            String descripcion = rs.getString("descripcion");
+            descripciones.add(descripcion);
+            todo.add(descripcion);
+            prueba[cuenta][4] = descripcion;
+
+            String codMaquinas = rs.getString("maquina_codMaquinaNulo");
+            // System.out.println(codMaquinas);
+            if (codMaquinas.equalsIgnoreCase("-1")) {
+                maquinas.add("ninguna");
+                prueba[cuenta][5] = "ninguna";
+            } else {
+                maquinas.add(codMaquinas);
+                prueba[cuenta][5] = codMaquinas;
+            }
+
+            todo.add(maquinas + "|"); //separador
+
+        }
+        while (rs.next());
+
+
+        String nombreCompleto = nombre + apellido;
+
+
+        for (int j = 0; j < prueba.length; j++) {
+            for (int k = 0; k < prueba[j].length; k++) {
+                System.out.println("Posición :" + j + " " + k);
+                System.out.println(prueba[j][k]);
+            }
+        }
+        return prueba;
     }
 }

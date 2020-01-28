@@ -47,13 +47,13 @@ public class GeneradorInformes {
                 //conseguir nº de trabajador
                 codTrabajador = baseDeDatos.verCodTrabajadorPorNombre(baseDeDatos.verTrabajadores().get(i));
 
-                String[][] resultadoConsulta = baseDeDatos.verTrabajosPorTrabajador(codTrabajador,fechaDesde,fechaHasta);
+                String[][] resultadoConsulta = baseDeDatos.verTrabajosPorTrabajador(codTrabajador, fechaDesde, fechaHasta);
                 //int resultadoConsultaTOTAL=baseDeDatos.verTrabajosPorTodosLosTrabajadores();
 
 
                 for (int j = 0; j < resultadoConsulta.length; j++) {
                     for (int k = 0; k < resultadoConsulta[j].length; k++) {
-                        System.out.println(" Mis datos son: "+resultadoConsulta[j][k]);
+                        System.out.println(" Mis datos son: " + resultadoConsulta[j][k]);
                     }
                 }
                 int numero = resultadoConsulta.length;
@@ -69,7 +69,7 @@ public class GeneradorInformes {
                 int numFila = 1;
 
                 String dia;
-                String diaMemoria="";
+                String diaMemoria = "";
 
                 for (int k = 0; k < numero; k++) {
                     nombre = resultadoConsulta[k][0];
@@ -77,7 +77,7 @@ public class GeneradorInformes {
                     fecha = resultadoConsulta[k][2];
 
                     //conseguir el día separándolo de la fecha
-                    dia=fecha.substring(8,10);
+                    dia = fecha.substring(8, 10);
 
                     tiempo = resultadoConsulta[k][3];
                     descripcion = resultadoConsulta[k][4];
@@ -90,10 +90,10 @@ public class GeneradorInformes {
                     //dia en la columna que toque
 
                     //Si el día NO es el mismo que el que hemos escrito, creamos una columna nueva
-                    if (!dia.equalsIgnoreCase(diaMemoria)){
-                        cabeceraColumna.createCell(k+1).setCellValue(dia);
+                    if (!dia.equalsIgnoreCase(diaMemoria)) {
+                        cabeceraColumna.createCell(k + 1).setCellValue(dia);
                     }
-                    
+
                     //cabeceraColumna.createCell(3).setCellValue("3");
 
                     //  FILAS
@@ -109,7 +109,7 @@ public class GeneradorInformes {
                     // row.createCell(3).setCellValue("sankumarsingh@gmail.com");
 
                     numFila++;
-                    diaMemoria=dia;
+                    diaMemoria = dia;
                 }
 
             }
