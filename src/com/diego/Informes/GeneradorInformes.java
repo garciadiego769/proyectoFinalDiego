@@ -21,9 +21,9 @@ public class GeneradorInformes {
     public GeneradorInformes(String fechaDesde, String fechaHasta) {
         try {
             //casa
-              //String filename = "/Users/diego/Documents/Clase/Proyecto Final/proyectoFinalDiego/ResumenDiario.xls";
+            String filename = "/Users/diego/Documents/Clase/Proyecto Final/proyectoFinalDiego/ResumenDiario.xls";
             //trabajo
-            String filename = "C:\\Users\\dgarcia\\Desktop\\Diego\\Clase\\ProyectoFinal\\proyectoFinalDiego.xls";
+            //String filename = "C:\\Users\\dgarcia\\Desktop\\Diego\\Clase\\ProyectoFinal\\proyectoFinalDiego.xls";
 
             HSSFWorkbook workbook = new HSSFWorkbook();
 
@@ -46,23 +46,21 @@ public class GeneradorInformes {
 
                 //conseguir nº de trabajador
                 codTrabajador = baseDeDatos.verCodTrabajadorPorNombre(baseDeDatos.verTrabajadores().get(i));
-                // ArrayList resultadoConsulta = baseDeDatos.verTrabajosPorTrabajador(codTrabajador);
-                // System.out.println(resultadoConsulta);
 
                 String[][] resultadoConsulta = baseDeDatos.verTrabajosPorTrabajador(codTrabajador);
-                int resultadoConsultaTOTAL=baseDeDatos.verTrabajosPorTodosLosTrabajadores();
+                //int resultadoConsultaTOTAL=baseDeDatos.verTrabajosPorTodosLosTrabajadores();
 
-                int numero=resultadoConsulta.length;
-               // numero=numero-1;
+                int numero = resultadoConsulta.length;
+                // numero=numero-1;
                 System.out.println(numero);
 
                 //nombre en celda A1
                 HSSFRow cabeceraColumna = hoja.createRow((short) 0);
 
                 //rowhead.createCell(0).setCellValue(resultadoConsulta[0][0]+" "+resultadoConsulta[0][1]);
-                System.out.println("asmiq"+resultadoConsulta[0][0]+" "+resultadoConsulta[0][1]);
-                                //por cada resultado
-                int numFila=1;
+                //System.out.println("asmiq"+resultadoConsulta[0][0]+" "+resultadoConsulta[0][1]);
+                //por cada resultado
+                int numFila = 1;
 
                 for (int k = 0; k < numero; k++) {
                     nombre = resultadoConsulta[k][0];
@@ -74,15 +72,15 @@ public class GeneradorInformes {
 
                     //cabeceraColumna = hoja.createRow((short) 0);
 
-                    cabeceraColumna.createCell(0).setCellValue(nombre);
+                    cabeceraColumna.createCell(0).setCellValue(nombre + " " + apellido);
                     cabeceraColumna.createCell(1).setCellValue("1");
                     cabeceraColumna.createCell(2).setCellValue("2");
                     cabeceraColumna.createCell(3).setCellValue("3");
 
 
-                    int numFila2=1;
+                    int numFila2 = 1;
 
-                   // int numCo
+                    // int numCo
                     //  FILAS
                     HSSFRow fila = hoja.createRow((short) numFila);
                     //  row.createCell(0).setCellValue(baseDeDatos.ver);

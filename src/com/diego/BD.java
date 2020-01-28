@@ -21,9 +21,9 @@ public class BD {
         String hostname = "localhost";
 
         //casa
-        //String port = "3306";
+        String port = "3306";
         //trabajo
-        String port = "3308";
+        //String port = "3308";
 
 
         //cadena de conexión
@@ -286,12 +286,12 @@ public class BD {
         //mover el cursor de vuelta a la primera posición
         rs.first();
 
-        tamaño=tamaño-1; //para que el array empiece en la 0
+        tamaño = tamaño - 1; //para que el array empiece en la 0
         String nombre = "";
         String apellido = "";
 
         //array bidimensional con tantas filas como resultados devuelve la consulta y 6 columnas
-        String[][] prueba = new String[tamaño][6];
+        String[][] prueba = new String[tamaño + 1][6];
 
         ArrayList<String> fechas = new ArrayList<String>();
         ArrayList<String> tiempos = new ArrayList<String>();
@@ -301,15 +301,14 @@ public class BD {
 
         int cuenta = -1;
         //guardamos todos los datos de la tabla TRABAJO para ese trabajador
-        while (rs.next()) {
+        do {
             //sumamos 1 al contador
             cuenta = cuenta + 1;
 
             nombre = rs.getString("nombre");
             todo.add(nombre);
             //nombre en la casilla 0,1
-            prueba[cuenta][0]=nombre;
-
+            prueba[cuenta][0] = nombre;
 
             apellido = rs.getString("apellido");
             todo.add(apellido);
@@ -341,7 +340,9 @@ public class BD {
             }
 
             todo.add(maquinas + "|"); //separador
+
         }
+        while (rs.next());
 
 
         String nombreCompleto = nombre + apellido;
@@ -349,7 +350,7 @@ public class BD {
 
         for (int j = 0; j < prueba.length; j++) {
             for (int k = 0; k < prueba[j].length; k++) {
-                System.out.println("Posición :"+j+" "+k);
+                System.out.println("Posición :" + j + " " + k);
                 System.out.println(prueba[j][k]);
             }
         }
@@ -372,6 +373,7 @@ public class BD {
 
         return tamaño;
     }
+
     public String verCodTrabajadorPorNombre(String nombre) throws SQLException {
         conectar();
         //Vamos haciendo las consultas para obtener los datos necesarios para insertar en la tabla
