@@ -9,8 +9,8 @@ public class Inicio {
     public static void main(String[] args) throws SQLException {
         // write your code here
 
-        BD baseDeDatos=new BD();
+        BD baseDeDatos = new BD();
         baseDeDatos.conectar();
 
-          }
+    }
 }

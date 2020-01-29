@@ -293,13 +293,7 @@ public class BD {
         String apellido = "";
 
         //array bidimensional con tantas filas como resultados devuelve la consulta y 6 columnas
-        String[][] prueba = new String[tamaño + 1][6];
-
-        ArrayList<String> fechas = new ArrayList<String>();
-        ArrayList<String> tiempos = new ArrayList<String>();
-        ArrayList<String> descripciones = new ArrayList<String>();
-        ArrayList<String> maquinas = new ArrayList<String>();
-        ArrayList<String> todo = new ArrayList<String>();
+        String[][] datos = new String[tamaño + 1][6];
 
         int cuenta = -1;
         //guardamos todos los datos de la tabla TRABAJO para ese trabajador
@@ -308,40 +302,28 @@ public class BD {
             cuenta = cuenta + 1;
 
             nombre = rs.getString("nombre");
-            todo.add(nombre);
             //nombre en la casilla 0,1
-            prueba[cuenta][0] = nombre;
+            datos[cuenta][0] = nombre;
 
             apellido = rs.getString("apellido");
-            todo.add(apellido);
-            prueba[cuenta][1] = apellido;
+            datos[cuenta][1] = apellido;
 
             String fecha = rs.getString("fecha");
-            fechas.add(fecha);
-            todo.add(fecha);
-            prueba[cuenta][2] = fecha;
+            datos[cuenta][2] = fecha;
 
             String tiempo = rs.getString("tiempo");
-            tiempos.add(tiempo);
-            todo.add(tiempo);
-            prueba[cuenta][3] = tiempo;
+            datos[cuenta][3] = tiempo;
 
             String descripcion = rs.getString("descripcion");
-            descripciones.add(descripcion);
-            todo.add(descripcion);
-            prueba[cuenta][4] = descripcion;
+            datos[cuenta][4] = descripcion;
 
             String codMaquinas = rs.getString("maquina_codMaquinaNulo");
             // System.out.println(codMaquinas);
             if (codMaquinas.equalsIgnoreCase("-1")) {
-                maquinas.add("ninguna");
-                prueba[cuenta][5] = "ninguna";
+                datos[cuenta][5] = "ninguna";
             } else {
-                maquinas.add(codMaquinas);
-                prueba[cuenta][5] = codMaquinas;
+                datos[cuenta][5] = codMaquinas;
             }
-
-            todo.add(maquinas + "|"); //separador
 
         }
         while (rs.next());
@@ -350,13 +332,13 @@ public class BD {
         String nombreCompleto = nombre + apellido;
 
 
-        for (int j = 0; j < prueba.length; j++) {
-            for (int k = 0; k < prueba[j].length; k++) {
+        for (int j = 0; j < datos.length; j++) {
+            for (int k = 0; k < datos[j].length; k++) {
                 System.out.println("Posición :" + j + " " + k);
-                System.out.println(prueba[j][k]);
+                System.out.println(datos[j][k]);
             }
         }
-        return prueba;
+        return datos;
     }
 
     //VER TRABAJOS DE TODOS LOS TRABAJADORES
@@ -396,9 +378,11 @@ public class BD {
     public String[][] verMantenimientosPorTrabajador(String codTrabajador, String fechaInicio, String fechaFin) throws SQLException {
         conectar();
 
-        String query = "SELECT DISTINCT * FROM trabajador,trabajoMantenimiento,mantenimiento " +
-                "WHERE trabajoMantenimiento.trabajador_dni='" + codTrabajador + "' AND trabajoMantenimiento.mantenimiento_codMantenimiento=manteniiento.codMantenimiento " +
-                "AND fecha BETWEEN '" + fechaInicio + "' AND '" + fechaFin + "';";
+        String query = "SELECT * FROM trabajador,trabajoMantenimiento,mantenimiento WHERE " +
+                "trabajador.dni=trabajoMantenimiento.trabajador_dni AND " +
+                "mantenimiento.codMantenimiento=trabajoMantenimiento.mantenimiento_codMantenimiento " +
+                "AND trabajador.dni='" + codTrabajador + "'AND fecha BETWEEN '" + fechaInicio + "' AND '" + fechaFin + "';";
+
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery(query);
 
@@ -411,17 +395,63 @@ public class BD {
         rs.first();
 
         tamaño = tamaño - 1; //para que el array empiece en la 0
-        String nombre = "";
-        String apellido = "";
+        String descripcion = "";
+        String tiempo = "";
 
         //array bidimensional con tantas filas como resultados devuelve la consulta y 6 columnas
-        String[][] prueba = new String[tamaño + 1][6];
+        String[][] datos = new String[tamaño + 1][2];
 
-        ArrayList<String> fechas = new ArrayList<String>();
-        ArrayList<String> tiempos = new ArrayList<String>();
-        ArrayList<String> descripciones = new ArrayList<String>();
-        ArrayList<String> maquinas = new ArrayList<String>();
-        ArrayList<String> todo = new ArrayList<String>();
+        int cuenta = -1;
+
+        do {
+            //sumamos 1 al contador
+            cuenta = cuenta + 1;
+
+            descripcion = rs.getString("descripcion");
+            //nombre en la casilla 0,1
+            datos[cuenta][0] = descripcion;
+
+            tiempo = rs.getString("tiempo");
+            datos[cuenta][1] = tiempo;
+        }
+        while (rs.next());
+
+
+        for (int j = 0; j < datos.length; j++) {
+            for (int k = 0; k < datos[j].length; k++) {
+                System.out.println("Posición :" + j + " " + k);
+                System.out.println(datos[j][k]);
+            }
+        }
+        return datos;
+    }
+
+
+    //VER TRABAJOS Y MANTENIMIENTOS MENSUALES
+    public String[][] verTrabajosMantenimientosMensuales(/*String fechaInicio, String fechaFin*/) throws SQLException {
+        conectar();
+
+        //Usamos los "as" para evitar ambiguedades ya que muchos campos se llaman igual y poder diferenciarlos
+
+        String query = "SELECT *,IFNULL(maquina_codMaquina,-1) as maquinaNulo, tarea.descripcion as descripcionTrabajo, trabajo.tiempo as tiempoTrabajo, mantenimiento.descripcion as descripcionMantenimiento, TrabajoMantenimiento.tiempo as tiempoMantenimiento, trabajo.fecha as fechaTrabajo FROM trabajo,tarea,mantenimiento,trabajoMantenimiento WHERE trabajo.tarea_codTarea=tarea.codTarea AND trabajoMantenimiento.mantenimiento_codMantenimiento=mantenimiento.codMantenimiento;";
+
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(query);
+
+        //conseguir tamaño resultSet, nº de resultados
+        int tamaño = 0;
+        while (rs.next()) {
+            tamaño++;    // moves cursor to the last row
+        }
+        //mover el cursor de vuelta a la primera posición
+        rs.first();
+
+        tamaño = tamaño - 1; //para que el array empiece en la 0
+        String descripcionTrabajo = "";
+        String tiempoTrabajo = "";
+
+        //array bidimensional con tantas filas como resultados devuelve la consulta y 5 columnas
+        String[][] datos = new String[tamaño + 1][6];
 
         int cuenta = -1;
         //guardamos todos los datos de la tabla TRABAJO para ese trabajador
@@ -429,55 +459,272 @@ public class BD {
             //sumamos 1 al contador
             cuenta = cuenta + 1;
 
-            nombre = rs.getString("nombre");
-            todo.add(nombre);
+            descripcionTrabajo = rs.getString("descripcionTrabajo");
             //nombre en la casilla 0,1
-            prueba[cuenta][0] = nombre;
+            datos[cuenta][0] = descripcionTrabajo;
 
-            apellido = rs.getString("apellido");
-            todo.add(apellido);
-            prueba[cuenta][1] = apellido;
+            tiempoTrabajo = rs.getString("tiempoTrabajo");
+            datos[cuenta][1] = tiempoTrabajo;
 
-            String fecha = rs.getString("fecha");
-            fechas.add(fecha);
-            todo.add(fecha);
-            prueba[cuenta][2] = fecha;
+            String descripcionMantenimientos = rs.getString("descripcionMantenimiento");
+            datos[cuenta][2] = descripcionMantenimientos;
 
-            String tiempo = rs.getString("tiempo");
-            tiempos.add(tiempo);
-            todo.add(tiempo);
-            prueba[cuenta][3] = tiempo;
+            String tiempo = rs.getString("tiempoMantenimiento");
+            datos[cuenta][3] = tiempo;
 
-            String descripcion = rs.getString("descripcion");
-            descripciones.add(descripcion);
-            todo.add(descripcion);
-            prueba[cuenta][4] = descripcion;
+            String fechaTrabajo = rs.getString("fechaTrabajo");
+            datos[cuenta][4] = fechaTrabajo;
 
-            String codMaquinas = rs.getString("maquina_codMaquinaNulo");
-            // System.out.println(codMaquinas);
+            String codMaquinas = rs.getString("maquinaNulo");
+
             if (codMaquinas.equalsIgnoreCase("-1")) {
-                maquinas.add("ninguna");
-                prueba[cuenta][5] = "ninguna";
+                datos[cuenta][5] = "ninguna";
             } else {
-                maquinas.add(codMaquinas);
-                prueba[cuenta][5] = codMaquinas;
+                datos[cuenta][5] = codMaquinas;
             }
-
-            todo.add(maquinas + "|"); //separador
-
         }
         while (rs.next());
 
+        return datos;
+    }
 
-        String nombreCompleto = nombre + apellido;
 
+    //GESTIÓN DE EMPLEADOS
+    public void verTrabajadoresConsola() throws SQLException {
+        conectar();
 
-        for (int j = 0; j < prueba.length; j++) {
-            for (int k = 0; k < prueba[j].length; k++) {
-                System.out.println("Posición :" + j + " " + k);
-                System.out.println(prueba[j][k]);
-            }
+        String query = "SELECT * FROM trabajador";
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(query);
+
+        while (rs.next()) {
+            String dni = rs.getString("dni");
+            String nombre = rs.getString("nombre");
+            String apellido = rs.getString("apellido");
+            String apellido2 = rs.getString("apellido2");
+
+            System.out.println("DNI: " + dni + " Nombre: " + nombre + " Apellidos: " + apellido + " " + apellido2);
         }
-        return prueba;
+        desconectar();
+    }
+
+    public void actualizarTrabajador(String dni, String nombre) throws SQLException {
+        conectar();
+
+        String query = "UPDATE trabajador SET nombre='" + nombre + "' WHERE dni='" + dni + "';";
+        PreparedStatement preparedStmt = conn.prepareStatement(query);
+        preparedStmt.executeUpdate();
+
+        verTrabajadoresConsola();
+        desconectar();
+
+    }
+
+    public void insertarTrabajador(String dni, String Nombre, String apellido, String apellido2) throws SQLException {
+        conectar();
+        // query con los datos a insertar
+        String query = "INSERT INTO trabajador (dni, nombre, apellido, apellido2) VALUES('" + dni + "','" + Nombre + "','" + apellido + "','" + apellido2 + "')";
+
+        preparedStmt = conn.prepareStatement(query);
+
+        // execute the preparedstatement
+        preparedStmt.execute();
+
+        verTrabajadoresConsola();
+        desconectar();
+    }
+
+
+    public void eliminarTrabajador(String dni) throws SQLException {
+        conectar();
+
+        String query = "DELETE FROM trabajador WHERE dni='" + dni + "';";
+        PreparedStatement preparedStatmt = conn.prepareStatement(query);
+
+        preparedStatmt.executeUpdate();
+        System.out.println("Empleado eliminado");
+        verTrabajadoresConsola();
+        desconectar();
+    }
+
+    //GESTIÓN MANTENIMIENTOS
+    public void verMantenimientosConsola() throws SQLException {
+        conectar();
+
+        String query = "SELECT * FROM mantenimiento";
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(query);
+
+        while (rs.next()) {
+            String cod = rs.getString("codMantenimiento");
+            String nombre = rs.getString("descripcion");
+
+            System.out.println("codigo: " + cod + " Nombre: " + nombre);
+        }
+        desconectar();
+    }
+
+    public void insertarMantenimiento(String codMantenimiento, String Nombre) throws SQLException {
+        conectar();
+        // query con los datos a insertar
+        String query = "INSERT INTO mantenimiento VALUES('" + codMantenimiento + "','" + Nombre + "')";
+
+        preparedStmt = conn.prepareStatement(query);
+
+        // execute the preparedstatement
+        preparedStmt.execute();
+
+        verMantenimientosConsola();
+        desconectar();
+    }
+
+
+    public void actualizarMantenimiento(String cod, String nombre) throws SQLException {
+        conectar();
+
+        String query = "UPDATE mantenimiento SET descripcion='" + nombre + "' WHERE codMantenimiento='" + cod + "';";
+        PreparedStatement preparedStmt = conn.prepareStatement(query);
+        preparedStmt.executeUpdate();
+
+        verMantenimientosConsola();
+        desconectar();
+
+    }
+
+    public void eliminarMantenimiento(String cod) throws SQLException {
+        conectar();
+
+        String query = "DELETE FROM mantenimiento WHERE codMantenimiento='" + cod + "';";
+        PreparedStatement preparedStatmt = conn.prepareStatement(query);
+
+        preparedStatmt.executeUpdate();
+        System.out.println("Mantenimiento eliminado");
+        verMantenimientosConsola();
+        desconectar();
+    }
+
+
+    //GESTIÓN MAQUINAS
+    public void verMaquinasConsola() throws SQLException {
+        conectar();
+
+        String query = "SELECT * FROM maquina";
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(query);
+
+        while (rs.next()) {
+            String cod = rs.getString("codMaquina");
+            String nombre = rs.getString("descripcion");
+
+            System.out.println("codigo: " + cod + " Nombre: " + nombre);
+        }
+        desconectar();
+    }
+
+    public void insertarMaquina(String cod, String Nombre) throws SQLException {
+        conectar();
+        // query con los datos a insertar
+        String query = "INSERT INTO maquina VALUES('" + cod + "','" + Nombre + "')";
+
+        preparedStmt = conn.prepareStatement(query);
+
+        // execute the preparedstatement
+        preparedStmt.execute();
+
+        verMaquinasConsola();
+        desconectar();
+    }
+
+
+    public void actualizarMaquina(String cod, String nombre) throws SQLException {
+        conectar();
+
+        String query = "UPDATE maquina SET descripcion='" + nombre + "' WHERE codMaquina='" + cod + "';";
+        PreparedStatement preparedStmt = conn.prepareStatement(query);
+        preparedStmt.executeUpdate();
+
+        verMaquinasConsola();
+        desconectar();
+    }
+
+    public void eliminarMaquina(String cod) throws SQLException {
+        conectar();
+
+        String query = "DELETE FROM maquina WHERE codMaquina='" + cod + "';";
+        PreparedStatement preparedStatmt = conn.prepareStatement(query);
+
+        preparedStatmt.executeUpdate();
+        System.out.println("Maquina eliminado");
+        verMaquinasConsola();
+        desconectar();
+    }
+
+    //GESTIÓN TAREAS
+    public void verTareasConsola() throws SQLException {
+        conectar();
+
+        String query = "SELECT * FROM tarea";
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(query);
+
+        while (rs.next()) {
+            String cod = rs.getString("codTarea");
+            String nombre = rs.getString("descripcion");
+            String codMaquina = rs.getString("maquina_codMaquina");
+
+            System.out.println("codigo: " + cod + " Nombre: " + nombre + " Máquina: " + codMaquina);
+        }
+        desconectar();
+    }
+
+    public void insertarTarea(String cod, String Nombre, String maquina) throws SQLException {
+        conectar();
+        String query = "";
+        //si la máquina está vacía, no la insertamos
+        if (maquina.equalsIgnoreCase("")) {
+            query = "INSERT INTO maquina (codMaquina,descripcion) VALUES('" + cod + "','" + Nombre + "','')";
+
+        } else {
+            query = "INSERT INTO maquina VALUES('" + cod + "','" + Nombre + "','" + maquina + "')";
+        }
+
+        // query con los datos a insertar
+        preparedStmt = conn.prepareStatement(query);
+
+        // execute the preparedstatement
+        preparedStmt.execute();
+
+        verTareasConsola();
+        desconectar();
+    }
+
+
+    public void actualizarTarea(String cod, String nombre, String maquina) throws SQLException {
+        conectar();
+        String query = "";
+
+        //si no tiene maquina asignada, no la insertamos
+        if (maquina.equalsIgnoreCase("")) {
+            query = "UPDATE tarea (codTarea,descripcion) SET descripcion='" + nombre + "' WHERE codTarea='" + cod + "';";
+        } else {
+            query = "UPDATE tarea SET descripcion='" + nombre + "', maquina_codMaquina='" + maquina + "' WHERE codTarea='" + cod + "';";
+        }
+        PreparedStatement preparedStmt = conn.prepareStatement(query);
+        preparedStmt.executeUpdate();
+
+        verTareasConsola();
+        desconectar();
+    }
+
+    public void eliminarTarea(String cod) throws SQLException {
+        conectar();
+
+        String query = "DELETE FROM tarea WHERE codTarea='" + cod + "';";
+        PreparedStatement preparedStatmt = conn.prepareStatement(query);
+
+        preparedStatmt.executeUpdate();
+        System.out.println("Tarea eliminada");
+        verTareasConsola();
+        desconectar();
     }
 }
