@@ -19,7 +19,7 @@ public class InicioInformes extends javax.swing.JFrame{
     private JLabel mensajelbl;
 
     public static void main(String[] args) throws SQLException {
-        JFrame frame = new JFrame("pantallaTiempo");
+        JFrame frame = new JFrame("Módulo de Informes");
         frame.setContentPane(new InicioInformes().panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

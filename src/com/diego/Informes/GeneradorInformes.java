@@ -19,9 +19,12 @@ public class GeneradorInformes {
         //INFORME RESUMEN DIARIO
         try {
             //casa
-            String filename = "/Users/diego/Documents/Clase/Proyecto Final/proyectoFinalDiego/ResumenDiario.xls";
+            String filename = "/Users/diego/Documents/Clase/Proyecto Final" +
+                    "/proyectoFinalDiego/ResumenDiario.xls";
             //trabajo
             //String filename = "C:\\Users\\dgarcia\\Desktop\\Diego\\Clase\\ProyectoFinal\\proyectoFinalDiego.xls";
+            String ficheroMensual = "/Users/diego/Documents/Clase/Proyecto Final" +
+                    "/proyectoFinalDiego/ResumenMensual.xls";
 
             HSSFWorkbook workbook = new HSSFWorkbook();
 
@@ -134,7 +137,6 @@ public class GeneradorInformes {
             //RESUMEN MENSUAL
 
             //generar fichero
-            String ficheroMensual = "/Users/diego/Documents/Clase/Proyecto Final/proyectoFinalDiego/ResumenMensual.xls";
             HSSFWorkbook libro = new HSSFWorkbook();
 
             String descripcionTrabajo = "";

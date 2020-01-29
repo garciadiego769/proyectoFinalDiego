@@ -16,7 +16,7 @@ public class EliminarEmpleado {
 
         System.out.println("Introduce el nº de trabajador (OBLIGATORIO):");
         String codTrabajador=br.readLine();
-
+        
         System.out.println("¿Seguro que deseas eliminar al empleado? (s/n):");
         String respuesta=br.readLine();
 

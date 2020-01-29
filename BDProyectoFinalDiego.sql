@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `proyectoFinal` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `proyectoFinal`;
 -- MySQL dump 10.13  Distrib 8.0.18, for macos10.14 (x86_64)
 --
 -- Host: 127.0.0.1    Database: proyectoFinal
@@ -37,7 +35,7 @@ CREATE TABLE `mantenimiento` (
 
 LOCK TABLES `mantenimiento` WRITE;
 /*!40000 ALTER TABLE `mantenimiento` DISABLE KEYS */;
-INSERT INTO `mantenimiento` VALUES (1,'limpieza'),(2,'engrasado');
+INSERT INTO `mantenimiento` VALUES (1,'limpieza'),(2,'DRT'),(3,'CHH');
 /*!40000 ALTER TABLE `mantenimiento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -88,7 +86,7 @@ CREATE TABLE `tarea` (
 
 LOCK TABLES `tarea` WRITE;
 /*!40000 ALTER TABLE `tarea` DISABLE KEYS */;
-INSERT INTO `tarea` VALUES (1,'Soldadura de ejes',NULL),(2,'Soldadura de ejes avanzada',NULL),(4,'Prensar acero',NULL);
+INSERT INTO `tarea` VALUES (1,'Soldadura de ejes',NULL),(2,'Soldadura de ejes avanzada',NULL),(3,'Poner remaches',2),(4,'Prensar acero',1),(5,'Fundir acero',NULL);
 /*!40000 ALTER TABLE `tarea` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,7 +129,8 @@ CREATE TABLE `trabajo` (
   `tarea_codTarea` int(11) NOT NULL,
   `fecha` date DEFAULT NULL,
   `tiempo` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`trabajador_dni`,`tarea_codTarea`),
+  `codTrabajo` int(11) NOT NULL,
+  PRIMARY KEY (`trabajador_dni`,`tarea_codTarea`,`codTrabajo`),
   KEY `fk_trabajador_has_tarea_tarea2_idx` (`tarea_codTarea`),
   KEY `fk_trabajador_has_tarea_trabajador2_idx` (`trabajador_dni`),
   CONSTRAINT `fk_trabajador_has_tarea_tarea2` FOREIGN KEY (`tarea_codTarea`) REFERENCES `tarea` (`codTarea`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -145,7 +144,7 @@ CREATE TABLE `trabajo` (
 
 LOCK TABLES `trabajo` WRITE;
 /*!40000 ALTER TABLE `trabajo` DISABLE KEYS */;
-INSERT INTO `trabajo` VALUES ('72768720R',1,'2019-01-01','1h');
+INSERT INTO `trabajo` VALUES ('67873412S',2,'2020-01-27','11',11),('67873412S',2,'2020-01-29','01:15',12),('67873412S',3,'2020-01-29','123',13),('72768720R',1,'2019-01-01','1h',1),('72768720R',4,'2020-01-26','0:15',5),('72768720R',4,'2020-01-26','31',8),('76879832S',3,'2020-01-26','1:15',4),('76879832S',3,'2020-01-26','12',7),('76879832S',3,'2020-01-26','1:18',10),('87561234J',2,'2019-01-01','22',2),('87561234J',2,'2020-01-26','32',3),('87561234J',5,'2020-01-26','1',6),('87561234J',5,'2020-01-26','2',9);
 /*!40000 ALTER TABLE `trabajo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,7 +160,8 @@ CREATE TABLE `trabajoMantenimiento` (
   `trabajador_dni` varchar(9) NOT NULL,
   `fecha` date DEFAULT NULL,
   `tiempo` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`mantenimiento_codMantenimiento`,`trabajador_dni`),
+  `codTrabajoMantenimiento` int(11) NOT NULL,
+  PRIMARY KEY (`mantenimiento_codMantenimiento`,`trabajador_dni`,`codTrabajoMantenimiento`),
   KEY `fk_mantenimiento_has_trabajador_trabajador1_idx` (`trabajador_dni`),
   KEY `fk_mantenimiento_has_trabajador_mantenimiento1_idx` (`mantenimiento_codMantenimiento`),
   CONSTRAINT `fk_mantenimiento_has_trabajador_mantenimiento1` FOREIGN KEY (`mantenimiento_codMantenimiento`) REFERENCES `mantenimiento` (`codMantenimiento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -175,7 +175,7 @@ CREATE TABLE `trabajoMantenimiento` (
 
 LOCK TABLES `trabajoMantenimiento` WRITE;
 /*!40000 ALTER TABLE `trabajoMantenimiento` DISABLE KEYS */;
-INSERT INTO `trabajoMantenimiento` VALUES (1,'72768720R','2019-01-01','1h');
+INSERT INTO `trabajoMantenimiento` VALUES (1,'72768720R','2019-01-01','1:00',1),(2,'67873412S','2020-01-29','01:15',7),(2,'72768720R','2020-01-26','31',3),(3,'67873412S','2020-01-27','11',6),(3,'67873412S','2020-01-29','123',8),(3,'76879832S','2020-01-26','12',2),(3,'76879832S','2020-01-26','1:15',5),(3,'87561234J','2020-01-26','2',4);
 /*!40000 ALTER TABLE `trabajoMantenimiento` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -188,4 +188,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-12 18:31:29
+-- Dump completed on 2020-01-29 16:59:09
